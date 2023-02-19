@@ -1,0 +1,8 @@
+Organ,peekachu,gtex,getxHelper
+liver,Leung_2015.Liver.hg38.peakachu-merged.loops,Liver.v8.signif_variant_gene_pairs.txt.gz,Liver.v8.egenes.txt.gz
+leftVentricle,Leung_2015.VentricleLeft.hg38.peakachu-merged.loops,Heart_Left_Ventricle.v8.signif_variant_gene_pairs.txt.gz,Heart_Left_Ventricle.v8.egenes.txt.gz
+lung,Schmitt_2016.Lung.hg38.peakachu-merged.loops,Lung.v8.signif_variant_gene_pairs.txt.gz,Lung.v8.egenes.txt.gz
+ovary,Schmitt_2016.Ovary.hg38.peakachu-merged.loops,Ovary.v8.signif_variant_gene_pairs.txt.gz,Ovary.v8.egenes.txt.gz
+pancreas,Schmitt_2016.Pancreas.hg38.peakachu-merged.loops,Pancreas.v8.signif_variant_gene_pairs.txt.gz,Pancreas.v8.egenes.txt.gz
+spleen,Schmitt_2016.Spleen.hg38.peakachu-merged.loops,Spleen.v8.signif_variant_gene_pairs.txt.gz,Spleen.v8.egenes.txt.gz
+aorta,Leung_2015.Aorta.hg38.peakachu-merged.loops,Artery_Aorta.v8.signif_variant_gene_pairs.txt.gz,Artery_Aorta.v8.egenes.txt.gz

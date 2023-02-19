@@ -1,0 +1,6 @@
+first run ./runner.sh
+then go inside enhancerGene folder cd enhancerGene
+run:
+python3 Executor.py ENCFF979PSS.bed.gz
+python3 Executor.py <file path>
+
