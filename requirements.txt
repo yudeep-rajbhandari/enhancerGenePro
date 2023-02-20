@@ -5,7 +5,6 @@ async-generator==1.10
 attrs==22.2.0
 backcall==0.2.0
 bleach==4.1.0
-bedtools==2.30.0
 certifi==2016.9.26
 cffi==1.15.1
 click==8.0.4
