@@ -1,0 +1,19 @@
+FROM ubuntu
+
+RUN apt update
+RUN apt install pyhton3-pip -y
+RUN apt-get install bedtools
+RUN apt-get install libbz2-dev liblzma-dev
+RUN pip3 install pandas
+RUN pip3 install pybedtools
+RUN pip3 install seaborn
+RUN pip3 install matplotlib
+RUN pip3 install swifter
+RUN pip install matplotlib-venn
+RUN pip3 install Flask
+
+WORKDIR /app
+
+COPY . .
+
+CMD["python","waitress_server.py"]

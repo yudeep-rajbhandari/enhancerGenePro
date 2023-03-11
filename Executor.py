@@ -2,20 +2,20 @@
 # coding: utf-8
 
 # In[4]:
-
-
 import os
+import uuid
 import pandas as pd
 from flask import Flask, flash, request, abort, make_response, jsonify
 from werkzeug.utils import secure_filename
-
+import chiaPetAnalysis
 app = Flask(__name__)
 import sys
 import shutil
 from flask import Response
-
-# In[ ]:
-
+import enhancerGeneDistanceBased
+import eQTLAanalysis
+import mergeMethods
+from multiprocessing import Process
 
 def executeFunc(a,organ):
     df1 = pd.read_csv('mapping.csv')
@@ -23,29 +23,50 @@ def executeFunc(a,organ):
     chiapet = organFiles['peekachu']
     eqtl = organFiles['gtex']
     eqtlHelp = organFiles['getxHelper']
-    os.system('python3 chiaPet-Analysis.py '+a +' '+ chiapet.values[0])
-    os.system('python3 enhancer-gene-distanceBased.py '+a+' & python3 eQTL-Aanalysis.py '+a+' '+eqtl.values[0] +' '+eqtlHelp.values[0])
-    os.system('python3 mergeMethods.py '+a)
-    shutil.make_archive('file-output', 'zip', 'images')
-    
 
+    chiaFile = 'tempChiapet'+str(uuid.uuid4())+'.bed'
+    distanceFile = 'tempFinaldistance'+str(uuid.uuid4())+'.bed'
+    eqtlFile = 'tempFinaleQTL' + str(uuid.uuid4()) + '.bed'
+    chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile)
+    enhancerGeneDistanceBased.startPoint(a,distanceFile)
+    eQTLAanalysis.startPoint(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile)
+    imagesFileName = 'images-'+str(uuid.uuid4())
+    os.mkdir(imagesFileName[0:len(imagesFileName)])
+    mergeMethods.startPoint(chiaFile,distanceFile,eqtlFile,imagesFileName+'/')
+    os.remove(chiaFile)
+    os.remove(distanceFile)
+    os.remove(eqtlFile)
+    shutil.make_archive(imagesFileName, 'zip', imagesFileName)
+    return imagesFileName
+
+def runInParallel(*fns):
+  proc = []
+  for fn in fns:
+    p = Process(target=fn)
+    p.start()
+    proc.append(p)
+  for p in proc:
+    p.join()
 
 # In[3]:
-def sendFile():
+def sendFile(imagesFileName):
     path=''
-    zipname = 'file-output.zip'
+    zipname = imagesFileName+'.zip'
     with open(os.path.join(path, zipname), 'rb') as f:
         data = f.readlines()
     os.remove(os.path.join(path, zipname))
+    shutil.rmtree(os.path.join(path,imagesFileName))
     return Response(data, headers={
         'Content-Type': 'application/zip',
         'Content-Disposition': 'attachment; filename=%s;' % zipname
     })
 
-ALLOWED_EXTENSIONS = ['bed','bed.gz']
+
+
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    ALLOWED_EXTENSIONS = ['bed', 'gz']
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/execute/<organ>',methods=['GET', 'POST'])
 def show_user(organ):
     try:
@@ -61,8 +82,8 @@ def show_user(organ):
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(filename)
-                executeFunc(filename,organ)
-                return sendFile()
+                images = executeFunc(filename,organ)
+                return sendFile(images)
             else:
                 raise Exception('file name is not properly formatted')
 
@@ -70,8 +91,8 @@ def show_user(organ):
         abort(make_response(jsonify(message=str(e)), 400))
 
 
-    
-   
+
+
   #returns the username
   # return 'Username: %s' % username
 
