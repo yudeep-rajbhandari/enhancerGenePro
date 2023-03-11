@@ -17,4 +17,4 @@ WORKDIR /app
 
 COPY . .
 
-CMD ["python","waitress_server.py"]
+CMD ["python3","waitress_server.py"]
