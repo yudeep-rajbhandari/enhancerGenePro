@@ -1,7 +1,7 @@
 FROM ubuntu
 
 RUN apt update
-RUN apt install pyhton3-pip -y
+RUN apt install python3-pip -y
 RUN apt-get install bedtools
 RUN apt-get install libbz2-dev liblzma-dev
 RUN pip3 install pandas
