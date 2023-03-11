@@ -11,6 +11,7 @@ RUN pip3 install matplotlib
 RUN pip3 install swifter
 RUN pip install matplotlib-venn
 RUN pip3 install Flask
+RUN pip3 install waitress
 
 WORKDIR /app
 
