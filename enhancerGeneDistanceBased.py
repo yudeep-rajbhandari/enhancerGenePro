@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
+import logging
 
 # In[41]:
 
 
 import pandas as pd
+import ray
 from pybedtools import BedTool
 from pybedtools.featurefuncs import TSS
 import os
@@ -73,7 +75,7 @@ def startPoint(rawBed,tempFinalFile):
     closestGene1 = closestGene1[closestGene1[3].str.contains('EH')]
     closestGene1 = closestGene1.drop_duplicates().reset_index(drop=True)
     closestGene1.to_csv(tempFinalFile, sep='\t', header=None, index=False)
-    print('finished processing distance based')
+    logging.info('finished processing distance based')
     return tempFinalFile
 
 

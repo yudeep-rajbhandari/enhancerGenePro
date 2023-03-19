@@ -173,7 +173,6 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
 
     eqtlFig.savefig(imagesFileName+"eqtlHisto.png")
     fig228.figure.clf()
-    print(imagesFileName[0:len(imagesFileName)-2])
 
 
 def startPosition(df):

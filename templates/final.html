@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>File Upload Form</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+		}
+
+		form {
+			width: 400px;
+			margin: auto;
+			padding: 20px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			background-color: #f2f2f2;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 10px;
+			font-weight: bold;
+		}
+
+		input[type="text"],
+		input[type="email"],
+		input[type="file"],
+		textarea {
+			display: block;
+			width: 100%;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			margin-bottom: 20px;
+			box-sizing: border-box;
+		}
+
+		input[type="submit"] {
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			padding: 10px 20px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+
+		input[type="submit"]:hover {
+			background-color: #3e8e41;
+		}
+        .progress {
+			background-color: #ddd;
+			border-radius: 10px;
+            margin:auto;
+			padding: 3px;
+			width: 300px;
+		}
+
+		.progressBar {
+			background-color: #4CAF50;
+			height: 20px;
+			border-radius: 10px;
+			width: 0%;
+			transition: width 0.5s ease-in-out;
+		}
+
+		.progressLabel {
+			margin-top: 5px;
+			font-size: 18px;
+			font-weight: bold;
+			text-align: center;
+		}
+
+	</style>
+</head>
+<script>
+    function loading(){
+        console.log("inside loading")
+        document.getElementById("aa").style.width="50%";
+        document.getElementById("form").style.display="none";
+        document.getElementById("loading").style.display="block";
+    }
+</script>
+<body>
+<div class="progress">
+		<div class="progressBar" id="aa" style="width: 100%"></div>
+	</div>
+Your file is ready to download.
+<a href="{{ url_for('database_download', filename=filename) }}">Click Here</a>
+
+
+</body>
+</html>

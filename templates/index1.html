@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Enhancer Gene Comparison</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+		}
+
+		form {
+			width: 400px;
+			margin: auto;
+			padding: 20px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			background-color: #f2f2f2;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 10px;
+			font-weight: bold;
+		}
+
+		input[type="text"],
+		input[type="email"],
+		input[type="file"],
+		textarea {
+			display: block;
+			width: 100%;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			margin-bottom: 20px;
+			box-sizing: border-box;
+		}
+
+		input[type="submit"] {
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			padding: 10px 20px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+
+		input[type="submit"]:hover {
+			background-color: #3e8e41;
+		}
+        .progress {
+			background-color: #ddd;
+			border-radius: 10px;
+            margin:auto;
+
+			padding: 3px;
+			width: 300px;
+		}
+
+		.progressBar {
+			background-color: #4CAF50;
+			height: 20px;
+			border-radius: 10px;
+			width: 0%;
+			transition: width 0.5s ease-in-out;
+		}
+
+		.progressLabel {
+			margin-top: 5px;
+			font-size: 18px;
+			font-weight: bold;
+			text-align: center;
+		}
+
+	</style>
+</head>
+<script>
+    function loading(){
+        console.log("inside loading")
+        document.getElementById("aa").style.width="50%";
+        document.getElementById("form").style.display="none";
+        document.getElementById("loading").style.display="block";
+    }
+</script>
+<body>
+<div class="progress">
+		<div class="progressBar" id="aa" style="width: 10%"></div>
+	</div>
+<div id ="loading" style="display: none;margin:auto;" align="center">
+    <h2 style="color: #862E06">It takes around 4-5 minutes to process, Please Hold tight </h2>
+    <img src="{{ url_for('static', filename='loading.gif') }}">
+</div>
+	<form method="post" id="form" enctype="multipart/form-data">
+		<label for="name">Select an organ:</label>
+       <select name="organ" id="organ">
+  <option value="liver">liver</option>
+  <option value="leftVentricle">leftVentricle</option>
+  <option value="lung">lung</option>
+  <option value="ovary">ovary</option>
+    <option value="pancreas">pancreas</option>
+    <option value="spleen">spleen</option>
+    <option value="aorta">aorta</option>
+</select>
+
+		<label for="email">Email:</label>
+		<input type="email" id="email" name="email" required>
+
+		<label for="file">File:</label>
+		<input type="file" id="file" name="file" required>
+
+		<label for="message">Message:</label>
+		<textarea id="message" name="message"></textarea>
+
+		<input type="submit" value="Upload" onclick="loading()">
+	</form>
+
+</body>
+</html>

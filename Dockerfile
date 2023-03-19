@@ -12,9 +12,9 @@ RUN pip3 install swifter
 RUN pip install matplotlib-venn
 RUN pip3 install Flask
 RUN pip3 install waitress
-
+RUN pip3 install flask-crontab
 WORKDIR /app
 
 COPY . .
-
+CMD ["flask", "crontab add"]
 CMD ["python3","waitress_server.py"]
