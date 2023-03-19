@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
+import logging
 import uuid
 
 # In[1]:
 
 
 import pandas as pd
+
 from pybedtools import BedTool
 from pybedtools.featurefuncs import TSS
 import os
@@ -48,7 +50,7 @@ def startPoint(rawBed,file,fileHelp,finalTempEQTL):
     finaldf = finaldf.drop_duplicates(subset=['enhancer_id', 'gene_id'], keep='last')
     finaldf.to_csv(finalTempEQTL, sep='\t', header=None, index=False)
     os.remove(tempEQTL1)
-    print("Finished processing eqtl")
+    logging.info("Finished processing eqtl")
     return finalTempEQTL
 
 

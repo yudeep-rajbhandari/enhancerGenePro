@@ -6,7 +6,7 @@ import logging
 
 
 import pandas as pd
-import ray
+
 from pybedtools import BedTool
 from pybedtools.featurefuncs import TSS
 import os

@@ -4,7 +4,7 @@ import pandas as pd
 from pybedtools import BedTool
 import os
 import uuid
-import ray
+
 def getKey(df):
     return str(df[0])+'_'+str(df[1])+'_'+str(df[2])+'_'+str(df[3])+'_'+str(df[4])+'_'+str(df[5])
 
