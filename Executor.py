@@ -42,8 +42,9 @@ def my_scheduled_job():
                 shutil.rmtree(file_path)
                 logging.info("deleted folder ",file_path)
             elif os.path.isfile(file_path) or os.path.islink(file_path):
-                os.remove(file_path)
-                logging.info("deleted file ", file_path)
+                if(file_path !='init'):
+                    os.remove(file_path)
+                    logging.info("deleted file ", file_path)
 
 
 
