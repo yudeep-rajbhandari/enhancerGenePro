@@ -5,6 +5,7 @@
 	<style>
 		body {
 			font-family: Arial, sans-serif;
+            background-image: url('static/peakpx.jpg');
 		}
 
 		form {
@@ -34,7 +35,9 @@
 			margin-bottom: 20px;
 			box-sizing: border-box;
 		}
-
+        select{
+            	margin-bottom: 20px;
+        }
 		input[type="submit"] {
 			background-color: #4CAF50;
 			color: #fff;
@@ -45,6 +48,7 @@
 			font-size: 16px;
 		}
 
+
 		input[type="submit"]:hover {
 			background-color: #3e8e41;
 		}
@@ -52,7 +56,7 @@
 			background-color: #ddd;
 			border-radius: 10px;
             margin:auto;
-
+            margin-bottom: 20px;
 			padding: 3px;
 			width: 300px;
 		}
@@ -103,7 +107,7 @@
 </select>
 
 		<label for="email">Email:</label>
-		<input type="email" id="email" name="email" required>
+		<input type="email" id="email" name="email">
 
 		<label for="file">File:</label>
 		<input type="file" id="file" name="file" required>
