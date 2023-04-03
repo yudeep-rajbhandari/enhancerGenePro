@@ -37,12 +37,13 @@ def my_scheduled_job():
         modified_time = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
 
         # check if the file was created or modified more than 8 minutes ago
-        if (current_time - created_time).total_seconds() > 480 or (current_time - modified_time).total_seconds() > 480:
+        if (current_time - created_time).total_seconds() > 22 or (current_time - modified_time).total_seconds() > 22:
             if os.path.isdir(file_path):
                 shutil.rmtree(file_path)
                 logging.info("deleted folder ",file_path)
             elif os.path.isfile(file_path) or os.path.islink(file_path):
-                if(file_path !='init'):
+                print("myPath"+file_path)
+                if(file_path !='temp/tempr'):
                     os.remove(file_path)
                     logging.info("deleted file ", file_path)
 
@@ -66,6 +67,8 @@ def executeFunc(a,organ):
     eqtl = organFiles['gtex']
     eqtlHelp = organFiles['getxHelper']
     temp = "temp/"
+    # if not os.path.exists(temp):
+    #     os.makedirs(temp)
     chiaFile = temp+'tempChiapet'+str(uuid.uuid4())+'.bed'
     distanceFile = temp+'tempFinaldistance'+str(uuid.uuid4())+'.bed'
     eqtlFile = temp+'tempFinaleQTL' + str(uuid.uuid4()) + '.bed'
