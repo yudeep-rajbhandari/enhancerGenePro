@@ -95,7 +95,6 @@ def getClosestgeneWithinDistance(enhancer,genes,distance,num):
     df1.drop(columns=df1.columns[5:len(dfSNP.columns)], 
         axis=1, 
         inplace=True)
-    print(df1.head())
     df1.drop(columns=df1.columns[9:len(dfGene.columns)+4], 
         axis=1, 
         inplace=True)
