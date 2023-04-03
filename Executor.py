@@ -70,7 +70,6 @@ def executeFunc(a,organ):
     distanceFile = temp+'tempFinaldistance'+str(uuid.uuid4())+'.bed'
     eqtlFile = temp+'tempFinaleQTL' + str(uuid.uuid4()) + '.bed'
 
-    pool = Pool(processes=20)
     p1 = Process(target=chiaPetAnalysis.startPoint,args=[a,chiapet.values[0],chiaFile])
     p2 = Process(target=enhancerGeneDistanceBased.startPoint,args=[a,distanceFile])
     p3 = Process(target=eQTLAanalysis.startPoint,args=[a,eqtl.values[0],eqtlHelp.values[0],eqtlFile])
