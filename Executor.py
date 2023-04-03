@@ -70,13 +70,29 @@ def executeFunc(a,organ):
     distanceFile = temp+'tempFinaldistance'+str(uuid.uuid4())+'.bed'
     eqtlFile = temp+'tempFinaleQTL' + str(uuid.uuid4()) + '.bed'
 
+    pool = Pool(processes=20)
+    p1 = Process(target=chiaPetAnalysis.startPoint,args=[a,chiapet.values[0],chiaFile])
+    p2 = Process(target=enhancerGeneDistanceBased.startPoint,args=[a,distanceFile])
+    p3 = Process(target=eQTLAanalysis.startPoint,args=[a,eqtl.values[0],eqtlHelp.values[0],eqtlFile])
+    p1.start();
+    p2.start();
+    p3.start();
+    p1.join();
+    p2.join()
+    p3.join()
+
+    # result_chiaPetAnalysis = pool.map_async(chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile))
+    # result_enhancerGeneDistanceBased = pool.map_async(enhancerGeneDistanceBased.startPoint(a,distanceFile))
+    # result_eQTLAanalysis = pool.map_async(eQTLAanalysis.startPoint(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile))
+    # print(result_eQTLAanalysis,result_chiaPetAnalysis,result_enhancerGeneDistanceBased)
+
     # ray.get([chiaPetAnalysis.startPoint.remote(a,chiapet.values[0],chiaFile),
     #          enhancerGeneDistanceBased.startPoint.remote(a,distanceFile),
     #          eQTLAanalysis.startPoint.remote(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile)])
 
-    chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile)
-    enhancerGeneDistanceBased.startPoint(a,distanceFile)
-    eQTLAanalysis.startPoint(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile)
+    # chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile)
+    # enhancerGeneDistanceBased.startPoint(a,distanceFile)
+    # eQTLAanalysis.startPoint(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile)
     imagesFileName = temp+'images-'+str(uuid.uuid4())
     os.mkdir(imagesFileName[0:len(imagesFileName)])
     mergeMethods.startPoint(chiaFile,distanceFile,eqtlFile,imagesFileName+'/')
