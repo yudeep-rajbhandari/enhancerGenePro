@@ -42,7 +42,6 @@ def my_scheduled_job():
                 shutil.rmtree(file_path)
                 logging.info("deleted folder ",file_path)
             elif os.path.isfile(file_path) or os.path.islink(file_path):
-                print("myPath"+file_path)
                 if(file_path !='temp/tempr'):
                     os.remove(file_path)
                     logging.info("deleted file ", file_path)
@@ -69,12 +68,13 @@ def executeFunc(a,organ):
     temp = "temp/"
     # if not os.path.exists(temp):
     #     os.makedirs(temp)
-    chiaFile = temp+'tempChiapet'+str(uuid.uuid4())+'.bed'
-    distanceFile = temp+'tempFinaldistance'+str(uuid.uuid4())+'.bed'
-    eqtlFile = temp+'tempFinaleQTL' + str(uuid.uuid4()) + '.bed'
+    myuuid = str(uuid.uuid4())
+    chiaFile = temp+'tempChiapet'+myuuid+'.bed'
+    distanceFile = temp+'tempFinaldistance'+myuuid+'.bed'
+    eqtlFile = temp+'tempFinaleQTL' + myuuid + '.bed'
 
-    p1 = Process(target=chiaPetAnalysis.startPoint,args=[a,chiapet.values[0],chiaFile])
-    p2 = Process(target=enhancerGeneDistanceBased.startPoint,args=[a,distanceFile])
+    p2 = Process(target=chiaPetAnalysis.startPoint,args=[a,chiapet.values[0],chiaFile])
+    p1 = Process(target=enhancerGeneDistanceBased.startPoint,args=[a,distanceFile])
     p3 = Process(target=eQTLAanalysis.startPoint,args=[a,eqtl.values[0],eqtlHelp.values[0],eqtlFile])
     p1.start();
     p2.start();
@@ -95,7 +95,7 @@ def executeFunc(a,organ):
     # chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile)
     # enhancerGeneDistanceBased.startPoint(a,distanceFile)
     # eQTLAanalysis.startPoint(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile)
-    imagesFileName = temp+'images-'+str(uuid.uuid4())
+    imagesFileName = temp+'images-'+myuuid
     os.mkdir(imagesFileName[0:len(imagesFileName)])
     mergeMethods.startPoint(chiaFile,distanceFile,eqtlFile,imagesFileName+'/')
     os.remove(chiaFile)
