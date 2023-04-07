@@ -83,6 +83,7 @@ def executeFunc(a,organ):
     p2.join()
     p3.join()
     p1.join()
+    p3.join()
 
 
 
