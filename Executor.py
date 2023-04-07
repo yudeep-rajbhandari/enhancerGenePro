@@ -9,6 +9,7 @@ from flask import Flask, flash, request, abort, make_response, jsonify, render_t
 from werkzeug.utils import secure_filename
 import chiaPetAnalysis
 app = Flask(__name__)
+app.logger.setLevel(logging.INFO)
 import sys
 import shutil
 from flask import Response
