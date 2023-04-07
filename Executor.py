@@ -181,7 +181,7 @@ def hello():
                 flash('No selected file')
                 raise Exception('No Selected file')
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
+                filename = "temp/"+secure_filename(file.filename)
                 file.save(filename)
                 images = executeFunc(filename, organ)
                 return render_template('final.html', filename=images)

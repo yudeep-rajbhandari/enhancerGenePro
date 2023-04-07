@@ -18,7 +18,8 @@ import os
 
 import sys
 
-
+logger = logging.getLogger('waitress')
+logger.setLevel(logging.INFO)
 
 # In[2]:
 def startPoint(rawBed,file,fileHelp,finalTempEQTL):
@@ -50,7 +51,7 @@ def startPoint(rawBed,file,fileHelp,finalTempEQTL):
     finaldf = finaldf.drop_duplicates(subset=['enhancer_id', 'gene_id'], keep='last')
     finaldf.to_csv(finalTempEQTL, sep='\t', header=None, index=False)
     os.remove(tempEQTL1)
-    logging.info("Finished processing eqtl")
+    logger.info("Finished processing eqtl "+ finalTempEQTL)
     return finalTempEQTL
 
 

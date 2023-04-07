@@ -4,7 +4,8 @@ import pandas as pd
 from pybedtools import BedTool
 import os
 import uuid
-
+logger = logging.getLogger('waitress')
+logger.setLevel(logging.INFO)
 def getKey(df):
     return str(df[0])+'_'+str(df[1])+'_'+str(df[2])+'_'+str(df[3])+'_'+str(df[4])+'_'+str(df[5])
 
@@ -96,7 +97,7 @@ def startPoint(rawBed,file,tempFileName):
     df_final.to_csv(tempFileName, sep='\t', header=None, index=False)
     os.remove(final11)
     os.remove(final12)
-    logging.info('finished processing chiaPet')
+    logger.info('finished processing chiaPet with file '+tempFileName)
     return tempFileName
 
 

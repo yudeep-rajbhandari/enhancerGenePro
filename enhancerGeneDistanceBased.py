@@ -18,7 +18,8 @@ import os
 import sys
 import uuid
 
-
+logger = logging.getLogger('waitress')
+logger.setLevel(logging.INFO)
 def getClosestgeneWithinDistance(enhancer,genes,distance,num):
     snp = BedTool(enhancer)
     gene = BedTool(genes)
@@ -78,7 +79,7 @@ def startPoint(rawBed,tempFinalFile):
 
     closestGene1.to_csv(tempFinalFile, sep='\t', header=None, index=False)
 
-    logging.info('finished processing distance based')
+    logger.info('finished processing distance based '+ tempFinalFile)
     return tempFinalFile
 
 
