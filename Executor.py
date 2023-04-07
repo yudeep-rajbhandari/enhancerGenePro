@@ -38,7 +38,7 @@ def my_scheduled_job():
         modified_time = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
 
         # check if the file was created or modified more than 8 minutes ago
-        if (current_time - created_time).total_seconds() > 840 or (current_time - modified_time).total_seconds() > 840:
+        if (current_time - modified_time).total_seconds() > 900 or (current_time - modified_time).total_seconds() > 900:
             if os.path.isdir(file_path):
                 shutil.rmtree(file_path)
                 logging.info("deleted folder ",file_path)
