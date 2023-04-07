@@ -74,15 +74,14 @@ def executeFunc(a,organ):
     distanceFile = temp+'tempFinaldistance'+myuuid+'.bed'
     eqtlFile = temp+'tempFinaleQTL' + myuuid + '.bed'
 
-    p2 = Process(target=chiaPetAnalysis.startPoint,args=[a,chiapet.values[0],chiaFile])
-    p1 = Process(target=enhancerGeneDistanceBased.startPoint,args=[a,distanceFile])
+    p1 = Process(target=chiaPetAnalysis.startPoint,args=[a,chiapet.values[0],chiaFile])
+    p2 = Process(target=enhancerGeneDistanceBased.startPoint,args=[a,distanceFile])
     p3 = Process(target=eQTLAanalysis.startPoint,args=[a,eqtl.values[0],eqtlHelp.values[0],eqtlFile])
     p1.start()
     p2.start()
     p3.start()
-    p2.join()
-    p3.join()
     p1.join()
+    p2.join()
     p3.join()
 
 
