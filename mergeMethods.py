@@ -2,7 +2,7 @@
 # coding: utf-8
 import os.path
 import uuid
-
+import logging
 # In[1]:
 
 
@@ -23,10 +23,12 @@ from collections import Counter
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
-
+logger = logging.getLogger('waitress')
+logger.setLevel(logging.INFO)
 
 # In[39]:
 def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
+    logger.info("started visulaization")
     chiaPet = pd.read_csv(chiapetVal, sep='\t', header=None)
     distance = pd.read_csv(distanceVal, sep='\t', header=None)
     eqTL = pd.read_csv(eqtlVal, sep='\t', header=None)
