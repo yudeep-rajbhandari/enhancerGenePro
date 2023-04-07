@@ -13,7 +13,7 @@ def getClosestgeneWithinDistance(enhancer,genes,distance,num):
     snp = BedTool(enhancer)
     gene = BedTool(genes)
     gene.sort()
-    tempfileClosest = 'temp'+str(uuid.uuid4())+'.bed'
+    tempfileClosest = 'temp/temp'+str(uuid.uuid4())+'.bed'
     nearby = snp.closest(gene, d=True,k=num, output=tempfileClosest)
     dfSNP = pd.read_csv(enhancer, sep='\t', header=None)
     dfGene = pd.read_csv(genes, sep='\t', header=None)

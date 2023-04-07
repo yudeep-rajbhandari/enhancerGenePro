@@ -16,7 +16,7 @@ from flask import Response
 import enhancerGeneDistanceBased
 import eQTLAanalysis
 import mergeMethods
-from multiprocessing import Process
+from multiprocessing import Process, connection
 import datetime
 import threading
 
@@ -83,6 +83,8 @@ def executeFunc(a,organ):
     p1.join();
     p2.join()
     p3.join()
+
+
 
     # result_chiaPetAnalysis = pool.map_async(chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile))
     # result_enhancerGeneDistanceBased = pool.map_async(enhancerGeneDistanceBased.startPoint(a,distanceFile))

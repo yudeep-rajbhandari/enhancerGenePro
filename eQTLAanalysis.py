@@ -31,7 +31,7 @@ def startPoint(rawBed,file,fileHelp,finalTempEQTL):
     new_header = df2.iloc[0]
     df2 = df2[1:]
     df2.columns = new_header
-    tempEQTL1 = 'temp1'+str(uuid.uuid4())+'.bed'
+    tempEQTL1 = 'temp/temp1'+str(uuid.uuid4())+'.bed'
     df2.to_csv(tempEQTL1, sep="\t", index=False)
     allBed = getClosestgeneWithinDistance(tempEQTL1, rawBed, 1000000, 1)
     allBed = allBed[allBed[16] <= 100]
@@ -85,7 +85,7 @@ def getClosestgeneWithinDistance(enhancer,genes,distance,num):
     snp = BedTool(enhancer)
     gene = BedTool(genes)
     gene.sort()
-    tempEQTL = 'tempEQTL'+str(uuid.uuid4())+'.bed'
+    tempEQTL = 'temp/tempEQTL'+str(uuid.uuid4())+'.bed'
     nearby = snp.closest(gene, d=True,k=num, output=tempEQTL)
     dfSNP = pd.read_csv(enhancer, sep='\t', header=None)
     dfGene = pd.read_csv(genes, sep='\t', header=None)
