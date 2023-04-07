@@ -38,12 +38,12 @@ def my_scheduled_job():
         modified_time = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
 
         # check if the file was created or modified more than 8 minutes ago
-        if (current_time - created_time).total_seconds() > 480 or (current_time - modified_time).total_seconds() > 480:
+        if (current_time - created_time).total_seconds() > 840 or (current_time - modified_time).total_seconds() > 840:
             if os.path.isdir(file_path):
                 shutil.rmtree(file_path)
                 logging.info("deleted folder ",file_path)
             elif os.path.isfile(file_path) or os.path.islink(file_path):
-                if(file_path !='init'):
+                if(file_path !='temp/tempr'):
                     os.remove(file_path)
                     logging.info("deleted file ", file_path)
 
@@ -67,18 +67,36 @@ def executeFunc(a,organ):
     eqtl = organFiles['gtex']
     eqtlHelp = organFiles['getxHelper']
     temp = "temp/"
-    chiaFile = temp+'tempChiapet'+str(uuid.uuid4())+'.bed'
-    distanceFile = temp+'tempFinaldistance'+str(uuid.uuid4())+'.bed'
-    eqtlFile = temp+'tempFinaleQTL' + str(uuid.uuid4()) + '.bed'
+    # if not os.path.exists(temp):
+    #     os.makedirs(temp)
+    myuuid = str(uuid.uuid4())
+    chiaFile = temp+'tempChiapet'+myuuid+'.bed'
+    distanceFile = temp+'tempFinaldistance'+myuuid+'.bed'
+    eqtlFile = temp+'tempFinaleQTL' + myuuid + '.bed'
+
+    p2 = Process(target=chiaPetAnalysis.startPoint,args=[a,chiapet.values[0],chiaFile])
+    p1 = Process(target=enhancerGeneDistanceBased.startPoint,args=[a,distanceFile])
+    p3 = Process(target=eQTLAanalysis.startPoint,args=[a,eqtl.values[0],eqtlHelp.values[0],eqtlFile])
+    p1.start();
+    p2.start();
+    p3.start();
+    p1.join();
+    p2.join()
+    p3.join()
+
+    # result_chiaPetAnalysis = pool.map_async(chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile))
+    # result_enhancerGeneDistanceBased = pool.map_async(enhancerGeneDistanceBased.startPoint(a,distanceFile))
+    # result_eQTLAanalysis = pool.map_async(eQTLAanalysis.startPoint(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile))
+    # print(result_eQTLAanalysis,result_chiaPetAnalysis,result_enhancerGeneDistanceBased)
 
     # ray.get([chiaPetAnalysis.startPoint.remote(a,chiapet.values[0],chiaFile),
     #          enhancerGeneDistanceBased.startPoint.remote(a,distanceFile),
     #          eQTLAanalysis.startPoint.remote(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile)])
 
-    chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile)
-    enhancerGeneDistanceBased.startPoint(a,distanceFile)
-    eQTLAanalysis.startPoint(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile)
-    imagesFileName = temp+'images-'+str(uuid.uuid4())
+    # chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile)
+    # enhancerGeneDistanceBased.startPoint(a,distanceFile)
+    # eQTLAanalysis.startPoint(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile)
+    imagesFileName = temp+'images-'+myuuid
     os.mkdir(imagesFileName[0:len(imagesFileName)])
     mergeMethods.startPoint(chiaFile,distanceFile,eqtlFile,imagesFileName+'/')
     os.remove(chiaFile)
