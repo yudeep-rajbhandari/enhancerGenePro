@@ -8,6 +8,9 @@ import pandas as pd
 from flask import Flask, flash, request, abort, make_response, jsonify, render_template, send_from_directory
 from werkzeug.utils import secure_filename
 import chiaPetAnalysis
+# from Process import Process
+from Process import Process
+
 app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
 import sys
@@ -16,9 +19,12 @@ from flask import Response
 import enhancerGeneDistanceBased
 import eQTLAanalysis
 import mergeMethods
-from multiprocessing import Process, connection
 import datetime
 import threading
+from pybedtools.helpers import BEDToolsError, cleanup
+
+logger = logging.getLogger('waitress')
+logger.setLevel(logging.INFO)
 
 def my_scheduled_job():
     logging.info("Scheduler running")
@@ -48,7 +54,6 @@ def my_scheduled_job():
                     logging.info("deleted file ", file_path)
 
 
-
 def my_method():
     # your code here
     my_scheduled_job()
@@ -60,6 +65,8 @@ def run_method():
 
 run_method()
 
+def target():
+    raise ValueError('Something went wrong...')
 def executeFunc(a,organ):
     df1 = pd.read_csv('mapping.csv')
     organFiles = df1[df1['Organ'] == organ]
@@ -77,12 +84,27 @@ def executeFunc(a,organ):
     p1 = Process(target=chiaPetAnalysis.startPoint,args=[a,chiapet.values[0],chiaFile])
     p2 = Process(target=enhancerGeneDistanceBased.startPoint,args=[a,distanceFile])
     p3 = Process(target=eQTLAanalysis.startPoint,args=[a,eqtl.values[0],eqtlHelp.values[0],eqtlFile])
+    # try:
     p1.start()
     p2.start()
     p3.start()
     p1.join()
     p2.join()
     p3.join()
+    if p1.exception or p2.exception or p3.exception:
+        print(p1.exception)
+        if  "chromomsome sort ordering" in str(p1.exception) or "chromomsome sort ordering" in str(p2.exception) or "chromomsome sort ordering" in str(p3.exception):
+            raise Exception("The file provided does not belong to the associated organ")
+        else:
+            raise Exception("Something went wrong with the file, please check your upload file")
+
+
+    # except BEDToolsError as e:
+    #     print("error:", e, file=sys.stderr)
+    #     os._exit(1)
+    #     raise Exception("Something is wrong")
+
+
 
 
 
@@ -190,6 +212,7 @@ def hello():
                 raise Exception('file name is not properly formatted')
 
     except Exception as e:
+        logger.error(str(e))
         abort(make_response(jsonify(message=str(e)), 400))
 
 

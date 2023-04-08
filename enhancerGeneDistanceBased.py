@@ -8,7 +8,7 @@ import logging
 import pandas as pd
 
 from pybedtools import BedTool
-from pybedtools.featurefuncs import TSS
+from pybedtools.helpers import BEDToolsError, cleanup
 import os
 
 
@@ -71,14 +71,17 @@ def startPoint(rawBed,tempFinalFile):
     # df21 = df21[1:]
     # df21.columns = new_header
     # df21.to_csv('tempDistanceBased.bed', sep="\t", index=False)
-    closestGene1 = getClosestgeneWithinDistance(rawBed, 'tempDistanceBased.bed', 1000000, 1)
+    try:
+        closestGene1 = getClosestgeneWithinDistance(rawBed, 'tempDistanceBased.bed', 1000000, 1)
+    except BEDToolsError:
+        raise Exception("Wrong file name")
 
     closestGene1 = closestGene1[closestGene1[14].str.contains('ENSG')]
     closestGene1 = closestGene1[closestGene1[3].str.contains('EH')]
     closestGene1 = closestGene1.drop_duplicates().reset_index(drop=True)
 
     closestGene1.to_csv(tempFinalFile, sep='\t', header=None, index=False)
-
+    cleanup()
     logger.info('finished processing distance based '+ tempFinalFile)
     return tempFinalFile
 
