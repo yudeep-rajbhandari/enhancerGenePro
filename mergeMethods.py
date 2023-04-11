@@ -171,7 +171,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     fig223.figure.clf()
     fig228 = sns.histplot(data=newdf_eqtl, x='repetitions')
     eqtlFig = fig228.get_figure()
-    eqtlFig.suptitle('Histogram for Distance of repetitions of Enhancer-Gene', fontsize=20)
+    eqtlFig.suptitle('Histogram for eQTL of repetitions of Enhancer-Gene', fontsize=20)
 
     eqtlFig.savefig(imagesFileName+"eqtlHisto.png")
     fig228.figure.clf()
