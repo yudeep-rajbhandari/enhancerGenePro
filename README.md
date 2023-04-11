@@ -1,6 +1,6 @@
 # enhancerGenePro
 
-## In root location execute:
+## Build the image 
 sudo  docker build -t my-app-image .
 
 ## To run the server
