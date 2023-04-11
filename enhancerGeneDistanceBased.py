@@ -13,9 +13,6 @@ import os
 
 
 # In[42]:
-
-
-import sys
 import uuid
 
 logger = logging.getLogger('waitress')
@@ -23,6 +20,7 @@ logger.setLevel(logging.INFO)
 def getClosestgeneWithinDistance(enhancer,genes,distance,num):
     snp = BedTool(enhancer)
     gene = BedTool(genes)
+    snp.sort()
     gene.sort()
     tempFileName = 'temp/tempDistance'+str(uuid.uuid4())+'.bed'
     nearby = snp.closest(gene, d=True,k=num,io=True, output=tempFileName)
@@ -75,11 +73,10 @@ def startPoint(rawBed,tempFinalFile):
         closestGene1 = getClosestgeneWithinDistance(rawBed, 'tempDistanceBased.bed', 1000000, 1)
     except BEDToolsError:
         raise Exception("Wrong file name")
-
+    print(closestGene1.head())
     closestGene1 = closestGene1[closestGene1[14].str.contains('ENSG')]
     closestGene1 = closestGene1[closestGene1[3].str.contains('EH')]
     closestGene1 = closestGene1.drop_duplicates().reset_index(drop=True)
-
     closestGene1.to_csv(tempFinalFile, sep='\t', header=None, index=False)
     cleanup()
     logger.info('finished processing distance based '+ tempFinalFile)

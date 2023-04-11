@@ -85,6 +85,7 @@ def geneIDNorm(df):
 def getClosestgeneWithinDistance(enhancer,genes,distance,num):
     snp = BedTool(enhancer)
     gene = BedTool(genes)
+    snp.sort()
     gene.sort()
     tempEQTL = 'temp/tempEQTL'+str(uuid.uuid4())+'.bed'
     nearby = snp.closest(gene, d=True,k=num, output=tempEQTL)
@@ -92,7 +93,7 @@ def getClosestgeneWithinDistance(enhancer,genes,distance,num):
     dfGene = pd.read_csv(genes, sep='\t', header=None)
     df1 = pd.read_csv(tempEQTL, sep='\t', header=None)
     df1 = df1[(df1[len(df1.columns)-1].between(-distance, distance))]
-    
+
     df1.drop(columns=df1.columns[5:len(dfSNP.columns)], 
         axis=1, 
         inplace=True)

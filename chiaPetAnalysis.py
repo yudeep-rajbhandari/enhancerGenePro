@@ -13,6 +13,7 @@ def getKey(df):
 def getClosestgeneWithinDistance(enhancer,genes,distance,num):
     snp = BedTool(enhancer)
     gene = BedTool(genes)
+    snp.sort()
     gene.sort()
     tempfileClosest = 'temp/temp'+str(uuid.uuid4())+'.bed'
     nearby = snp.closest(gene, d=True,k=num, output=tempfileClosest)
