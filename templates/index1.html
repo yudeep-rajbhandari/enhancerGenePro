@@ -2,23 +2,29 @@
 <html>
 <head>
 	<title>Enhancer Gene Comparison</title>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"></script> -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<style>
 		body {
 			font-family: Arial, sans-serif;
-            background-image: url('static/peakpx.jpg');
+            {#background-image: url('../static/peakpx.jpg');#}
+            /* background-image: url('../static/gene.jpg'); */
+			background-repeat: no-repeat;
+			background-size: cover;
 		}
 
 		form {
 			width: 400px;
 			margin: auto;
 			padding: 20px;
-			border: 1px solid #ccc;
-			border-radius: 5px;
-			background-color: #f2f2f2;
+			{#border: 1px solid #ccc;#}
+			{#border-radius: 5px;#}
+			background-color: transparent;
 		}
 
 		label {
 			display: block;
+            {#color: #cccccc;#}
 			margin-bottom: 10px;
 			font-weight: bold;
 		}
@@ -53,18 +59,23 @@
 			background-color: #3e8e41;
 		}
         .progress {
-			background-color: #ddd;
+			display: flex;
+			background-color: #fff;
 			border-radius: 10px;
             margin:auto;
             margin-bottom: 20px;
 			padding: 3px;
 			width: 300px;
+			height: 25px;
+			margin-top: 20px;
+			/* height: 1rem!important; */
 		}
 
 		.progressBar {
 			background-color: #4CAF50;
 			height: 20px;
 			border-radius: 10px;
+            border-color: black;
 			width: 0%;
 			transition: width 0.5s ease-in-out;
 		}
@@ -75,48 +86,135 @@
 			font-weight: bold;
 			text-align: center;
 		}
+        h2{
+            text-align: center;
+            {#color: white;#}
+            font-weight: bold;
+        }
+        #parent {
+  display: flex;
+  justify-content: space-around;
+}
+
+#left {
+  {#border: 1px solid lightgray;#}
+  width: 40%;
+}
+
+#right {
+  border: 1px solid lightgray;
+  width: 40%;
+}
 
 	</style>
 </head>
 <script>
     function loading(){
-        console.log("inside loading")
+        var ddl = document.getElementById("organ");
+        var selectedValue = ddl.options[ddl.selectedIndex].value;
+        console.log(selectedValue)
+    if (selectedValue == "Select an organ" || document.getElementById("file").value == "")
+   {
+    alert("Please select an organ type with a suitable file");
+   }
+   else{
         document.getElementById("aa").style.width="50%";
         document.getElementById("form").style.display="none";
         document.getElementById("loading").style.display="block";
     }
+
+    }
 </script>
 <body>
+<h2 style="margin-top: 20px">Enhancer Gene Prediction Comparator</h2>
 <div class="progress">
-		<div class="progressBar" id="aa" style="width: 10%"></div>
-	</div>
+	<div class="progressBar" id="aa" style="width: 10%"></div>
+</div>
 <div id ="loading" style="display: none;margin:auto;" align="center">
     <h2 style="color: #862E06">It takes around 4-5 minutes to process, Please Hold tight </h2>
-    <img src="{{ url_for('static', filename='loading.gif') }}">
+	<!-- <img src="{{ url_for('static', filename='loading.gif') }}"> -->
+	<img src="../static/loading.gif">
 </div>
 	<form method="post" id="form" enctype="multipart/form-data">
-		<label for="name">Select an organ:</label>
-       <select name="organ" id="organ">
-  <option value="liver">liver</option>
-  <option value="leftVentricle">leftVentricle</option>
-  <option value="lung">lung</option>
-  <option value="ovary">ovary</option>
-    <option value="pancreas">pancreas</option>
-    <option value="spleen">spleen</option>
-    <option value="aorta">aorta</option>
-</select>
-
-		<label for="email">Email:</label>
-		<input type="email" id="email" name="email">
-
-		<label for="file">File:</label>
-		<input type="file" id="file" name="file" required>
-
-		<label for="message">Message:</label>
-		<textarea id="message" name="message"></textarea>
-
+		<div class="form-group">
+			<label for="name">Select an organ:</label>
+			<select name="organ" id="organ" class="form-select" required>
+				<option selected>Select an organ</option>
+				<option value="liver">liver</option>
+				<option value="leftVentricle">leftVentricle</option>
+				<option value="lung">lung</option>
+				<option value="ovary">ovary</option>
+				<option value="pancreas">pancreas</option>
+				<option value="spleen">spleen</option>
+				<option value="aorta">aorta</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="email">Email:</label>
+			<input type="email" id="email" name="email" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="file">File:</label>
+			<input type="file" id="file" name="file" class="form-control" required>
+		</div>
+        Accepted file types : bed, bed.gz <br>
 		<input type="submit" value="Upload" onclick="loading()">
 	</form>
+<h2>Get all sort of wierd plots of comparison</h2>
+ <div id="parent">
+        <div id="left">
+            <h1 style="text-align: center"> Bar plots: Know the numbers</h1>
+            Users can use the knowledge of number of unique genes and enhancer linked as well as their to choose what sort of ratio/numbers they are looking in their respective data set.
+        </div>
+        <div id="right">
+        	 <img style="width: 350px; height: auto" src="{{ url_for('static', filename='enhancerGene.png') }}">
+            <img style="width: 350px; height: auto" src="{{ url_for('static', filename='enhancers.png') }}">
 
+        </div>
+    </div>
+<div id="parent">
+        <div id="left">
+            <h1 style="text-align: center"> Venn Diagrams: Know your overlaps</h1>
+            Users can use this data, to compare the unique enhancers,gene and their linkages among all three methods and can analyze their enhancer data set based on the overlap.
+They can also use the average p-value, which shows the strength of enhancer-gene link
+
+        </div>
+        <div id="right">
+        	 <img style="width: 350px; height: auto" src="{{ url_for('static', filename='enhancerGeneVenn.png') }}">
+            <img style="width: 350px; height: auto" src="{{ url_for('static', filename='AllGeneComparsion.png') }}">
+
+        </div>
+    </div>
+<div id="parent">
+        <div id="left">
+            <h1 style="text-align: center"> Histograms: Know your frequency</h1>
+            Knowing how many times your enhancer has linked to different genes can let you know about the nature of the enhancers in your data set.
+It can help you to choose one among three methods based on the type of result you are expecting from the data set based on frequency.
+
+
+        </div>
+        <div id="right">
+        	 <img style="width: 350px; height: auto" src="{{ url_for('static', filename='chiapetHisto.png') }}">
+            <img style="width: 350px; height: auto" src="{{ url_for('static', filename='eqtlHisto.png') }}">
+
+        </div>
+    </div>
+<div id="parent">
+        <div id="left">
+            <h1 style="text-align: center"> Get all these plots for 3 methods</h1>
+
+            Distance based : Based on proximity of enhancer and gene <br>
+chiaPet : Based on chromatin loop detection in genome-wide contact maps <br>
+            eQtl : Genetic variant associated with gene expression level
+
+
+        </div>
+        <div id="right">
+        	 <img style="width: 350px; height: auto" src="{{ url_for('static', filename='chia.jpg') }}">
+            <img style="width: 350px; height: auto" src="{{ url_for('static', filename='distanceBased1.png') }}">
+            <img style="width: 350px; height: auto" src="{{ url_for('static', filename='eqtl.jpg') }}">
+
+        </div>
+    </div>
 </body>
 </html>
