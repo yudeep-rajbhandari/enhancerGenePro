@@ -1,5 +1,5 @@
 # enhancerGenePro
-
+It takes a little longer to clone this repository as supporting files are of high lengths.
 ## Build the image 
 sudo  docker build -t my-app-image .
 
