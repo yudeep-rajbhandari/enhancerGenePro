@@ -22,6 +22,7 @@ import mergeMethods
 import datetime
 import threading
 from pybedtools.helpers import BEDToolsError, cleanup
+import pandas as pd
 
 logger = logging.getLogger('waitress')
 logger.setLevel(logging.INFO)
@@ -67,6 +68,9 @@ run_method()
 
 def target():
     raise ValueError('Something went wrong...')
+
+def startPosition(df):
+    return 'EH'+str(uuid.uuid4())
 def executeFunc(a,organ):
     df1 = pd.read_csv('mapping.csv')
     organFiles = df1[df1['Organ'] == organ]
@@ -77,13 +81,25 @@ def executeFunc(a,organ):
     # if not os.path.exists(temp):
     #     os.makedirs(temp)
     myuuid = str(uuid.uuid4())
-    chiaFile = temp+'tempChiapet'+myuuid+'.bed'
-    distanceFile = temp+'tempFinaldistance'+myuuid+'.bed'
-    eqtlFile = temp+'tempFinaleQTL' + myuuid + '.bed'
-
-    p1 = Process(target=chiaPetAnalysis.startPoint,args=[a,chiapet.values[0],chiaFile])
-    p2 = Process(target=enhancerGeneDistanceBased.startPoint,args=[a,distanceFile])
-    p3 = Process(target=eQTLAanalysis.startPoint,args=[a,eqtl.values[0],eqtlHelp.values[0],eqtlFile])
+    imagesFileName = temp + 'images-' + myuuid
+    os.mkdir(imagesFileName[0:len(imagesFileName)])
+    chiaFile = imagesFileName+'/tempChiapet'+myuuid+'.bed'
+    distanceFile = imagesFileName+'/tempFinaldistance'+myuuid+'.bed'
+    eqtlFile = imagesFileName+'/tempFinaleQTL' + myuuid + '.bed'
+    df22 = pd.read_csv( a, sep='\t', header=None)
+    tempEQTL1 = 'temp/rawBed' + str(uuid.uuid4()) + '.bed'
+    if(len(df22.columns) < 4):
+        df22[3] = df22.apply(startPosition, axis=1)
+    else:
+        df22 = df22[[0, 1,2,3]]
+    df22 = df22.sort_values(by=[0,1, 2], ascending=True)
+    new_header = df22.iloc[0]
+    df22 = df22[1:]
+    df22.columns = new_header
+    df22.to_csv(tempEQTL1, sep="\t", index=False)
+    p1 = Process(target=chiaPetAnalysis.startPoint,args=[tempEQTL1,chiapet.values[0],chiaFile])
+    p2 = Process(target=enhancerGeneDistanceBased.startPoint,args=[tempEQTL1,distanceFile])
+    p3 = Process(target=eQTLAanalysis.startPoint,args=[tempEQTL1,eqtl.values[0],eqtlHelp.values[0],eqtlFile])
     # try:
     p1.start()
     p2.start()
@@ -120,14 +136,14 @@ def executeFunc(a,organ):
     # chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile)
     # enhancerGeneDistanceBased.startPoint(a,distanceFile)
     # eQTLAanalysis.startPoint(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile)
-    imagesFileName = temp+'images-'+myuuid
-    os.mkdir(imagesFileName[0:len(imagesFileName)])
+
     mergeMethods.startPoint(chiaFile,distanceFile,eqtlFile,imagesFileName+'/')
+
+    shutil.make_archive(imagesFileName, 'zip', imagesFileName)
+    imagesFileName = imagesFileName[len(temp)-1:len(imagesFileName)]
     os.remove(chiaFile)
     os.remove(distanceFile)
     os.remove(eqtlFile)
-    shutil.make_archive(imagesFileName, 'zip', imagesFileName)
-    imagesFileName = imagesFileName[len(temp)-1:len(imagesFileName)]
     return imagesFileName
 
 def runInParallel(*fns):
@@ -193,6 +209,8 @@ def hello():
             return render_template('index1.html')
         elif request.method == 'POST':
             organ = request.form['organ']
+            if(organ == 'Select an organ'):
+                raise Exception('No Selected organ')
             print(organ)
             # check if the post request has the file part
             if 'file' not in request.files:

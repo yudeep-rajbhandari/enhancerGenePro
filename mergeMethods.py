@@ -1,22 +1,18 @@
 #!/usr/bin/env python
 # coding: utf-8
-import os.path
-import uuid
 import logging
-# In[1]:
+import math
 
-
-import pandas as pd
-import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import numpy as np
-import swifter
-import seaborn as sns
-import matplotlib.pyplot as plt1
 import matplotlib.pyplot as plt
-from matplotlib_venn import venn3
+import matplotlib.pyplot as plt1
+import numpy as np
+import pandas as pd
+import seaborn as sns
 from matplotlib_venn import venn2
-from collections import Counter
+from matplotlib_venn import venn3
+
+# In[1]:
 
 # In[38]:
 
@@ -26,19 +22,50 @@ pd.set_option('display.max_rows', None)
 logger = logging.getLogger('waitress')
 logger.setLevel(logging.INFO)
 
+def checkAndSupplyFile(file):
+    file1 = pd.DataFrame(columns=[0, 1, 2, 3, 4, 5, 6, 7, 8,9,10])
+    try:
+        return pd.read_csv(file, sep='\t', header=None)
+    except pd.errors.EmptyDataError as e:
+        return file1
+
+def createVenn(chiapet,distance,eqtl):
+    ax = plt.gca()
+    num=3
+    setAll = [chiapet,distance,eqtl]
+    li = ['chiapet', 'distance', 'eqtl']
+    if(len(chiapet)==0):
+        num=num-1
+        setAll.remove(chiapet)
+        li.remove('chiapet')
+    if(len(distance)==0):
+        num=num-1
+        setAll.remove(distance)
+        li.remove('distance')
+    if(len(eqtl)==0):
+        num=num-1
+        setAll.remove(eqtl)
+        li.remove('eqtl')
+    if(num==3):
+        return venn3(setAll, tuple(li),ax=ax)
+    elif (num==2):
+        return venn2(setAll,tuple(li),ax=ax)
 # In[39]:
 def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     logger.info("started visulaization")
-    chiaPet = pd.read_csv(chiapetVal, sep='\t', header=None)
-    distance = pd.read_csv(distanceVal, sep='\t', header=None)
-    eqTL = pd.read_csv(eqtlVal, sep='\t', header=None)
+    chiaPet = checkAndSupplyFile(chiapetVal)
+    distance = checkAndSupplyFile(distanceVal)
+    eqTL = checkAndSupplyFile(eqtlVal)
     distance[8] = distance[8].apply(lambda x: np.log10(x) if x != 0 else x)
     chiaPet[9] = 'chiaPet'
-    chiaPet[10] = chiaPet.swifter.apply(startPosition, axis=1)
-    distance[10] = distance.apply(startPosition, axis=1)
+    if (len(chiaPet[3]) > 0) and (len(chiaPet[7]) > 0):
+        chiaPet[10] = chiaPet.apply(startPosition, axis=1)
+    if (len(distance[3]) > 0) and (len(distance[7]) > 0):
+        distance[10] = distance.apply(startPosition, axis=1)
     distance[9] = 'distance'
     eqTL[9] = 'eqtl'
-    eqTL[10] = eqTL.apply(startPosition, axis=1)
+    if (len(eqTL[3]) > 0) and (len(eqTL[7]) > 0):
+        eqTL[10] = eqTL.apply(startPosition, axis=1)
     finalConcat = pd.concat([chiaPet, eqTL, distance])
     fig1 = sns.countplot(x=9, data=finalConcat)
     fig1.figure.savefig(imagesFileName+"TotalcountComparsion.png")
@@ -82,16 +109,16 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     plt1.legend(handles=[indigo, red])
     plt1.savefig(imagesFileName+'enhancerGene.png')
     plt1.clf()
-    allDF = chiaPet.merge(eqTL, on=3).merge(distance, on=3)
-    allDF1 = allDF[(allDF['7_x'] == allDF['7_y']) & (allDF['7_x'] == allDF[7])]
-    k = allDF1[['8_x', '8_y']]
-    k = k.rename(columns={'8_x': 'chiaPet', '8_y': 'eqtl'})
+    # allDF = chiaPet.merge(eqTL, on=3).merge(distance, on=3)
+    # allDF1 = allDF[(allDF['7_x'] == allDF['7_y']) & (allDF['7_x'] == allDF[7])]
+    # k = allDF1[['8_x', '8_y']]
+    # k = k.rename(columns={'8_x': 'chiaPet', '8_y': 'eqtl'})
     set1 = set(chiaPet[7])
     set2 = set(distance[7])
     set3 = set(eqTL[7])
     fig = plt.figure(figsize=(10, 10))
 
-    venn3([set1, set2, set3], ('chiapet', 'distance', 'eqtl'))
+    createVenn(set1, set2, set3)
     fig.suptitle('Venn diagram of unique Genes', fontsize=20)
     plt.savefig(imagesFileName+'AllGeneComparsion.png')
     plt.clf()
@@ -102,7 +129,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     fig = plt.figure(figsize=(10, 10))
     fig.suptitle('Venn diagram of number of unique Enhancer', fontsize=20)
 
-    venn3([set1, set2, set3], ('chiapet', 'distance', 'eqtl'))
+    createVenn(set1,set2,set3)
     plt.savefig(imagesFileName+'AllEnhancerComparsion.png')
     plt.clf()
 
@@ -113,18 +140,20 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     fig = plt.figure(figsize=(10, 10))
     fig.suptitle('Venn diagram of number of unique Enhancer-Gene', fontsize=20)
     ax = plt.gca()
-    v = venn3([set1, set2, set3], ('chiaPet', 'eqTL', 'distance'), ax=ax)
+    v = createVenn(set1,set2,set3)
     h, l = [], []
-    for i in ['10', '01', '111']:
+    for i in ['10', '01', '100']:
         # remove label by setting them to empty string:
         v.get_label_by_id(i).set_text("")
         # append patch to handles list
         h.append(v.get_patch_by_id(i))
         # append count to labels list
-
-    l.append(chiaPet[8].mean())
-    l.append(eqTL[8].mean())
-    l.append(distance[8].mean())
+    if not math.isnan(chiaPet[8].mean()):
+        l.append(0 if math.isnan(chiaPet[8].mean()) else chiaPet[8].mean())
+    if not math.isnan(distance[8].mean()):
+        l.append(0 if math.isnan(distance[8].mean()) else distance[8].mean())
+    if not math.isnan(eqTL[8].mean()):
+        l.append(0 if math.isnan(eqTL[8].mean()) else eqTL[8].mean())
     # create legend from handles and labels    
     ax.legend(handles=h, labels=l, title="p-value")
 
@@ -159,22 +188,25 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     del (chiaPet)
     del (distance)
     del (eqTL)
-    fig22 = sns.histplot(data=newdf, x='repetitions')
-    chiapetFig = fig22.get_figure()
-    chiapetFig.suptitle('Histogram for chiapet of repetitions of Enhancer-Gene', fontsize=20)
-    chiapetFig.savefig(imagesFileName+"chiapetHisto.png")
+    if newdf.shape[0] > 0:
+        fig22 = sns.histplot(data=newdf, x='repetitions')
+        chiapetFig = fig22.get_figure()
+        chiapetFig.suptitle('Histogram for chiapet of repetitions of Enhancer-Gene', fontsize=20)
+        chiapetFig.savefig(imagesFileName+"chiapetHisto.png")
     newdf_distance[newdf_distance.repetitions > 1].count()
-    fig223 = sns.histplot(data=newdf_distance, x='repetitions', bins=5)
-    distanceFig = fig223.get_figure()
-    distanceFig.suptitle('Histogram for Distance of repetitions of Enhancer-Gene', fontsize=20)
-    distanceFig.savefig(imagesFileName+"distanceHisto.png")
-    fig223.figure.clf()
-    fig228 = sns.histplot(data=newdf_eqtl, x='repetitions')
-    eqtlFig = fig228.get_figure()
-    eqtlFig.suptitle('Histogram for eQTL of repetitions of Enhancer-Gene', fontsize=20)
+    if newdf_distance.shape[0] > 0:
+        fig223 = sns.histplot(data=newdf_distance, x='repetitions', bins=5)
+        distanceFig = fig223.get_figure()
+        distanceFig.suptitle('Histogram for Distance of repetitions of Enhancer-Gene', fontsize=20)
+        distanceFig.savefig(imagesFileName+"distanceHisto.png")
+        fig223.figure.clf()
+    if newdf_eqtl.shape[0] > 0:
+        fig228 = sns.histplot(data=newdf_eqtl, x='repetitions')
+        eqtlFig = fig228.get_figure()
+        eqtlFig.suptitle('Histogram for eQTL of repetitions of Enhancer-Gene', fontsize=20)
 
-    eqtlFig.savefig(imagesFileName+"eqtlHisto.png")
-    fig228.figure.clf()
+        eqtlFig.savefig(imagesFileName+"eqtlHisto.png")
+        fig228.figure.clf()
 
 
 def startPosition(df):

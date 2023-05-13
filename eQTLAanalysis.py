@@ -35,15 +35,15 @@ def startPoint(rawBed,file,fileHelp,finalTempEQTL):
     tempEQTL1 = 'temp/temp1'+str(uuid.uuid4())+'.bed'
     df2.to_csv(tempEQTL1, sep="\t", index=False)
     allBed = getClosestgeneWithinDistance(tempEQTL1, rawBed, 1000000, 1)
-    allBed = allBed[allBed[16] <= 100]
-    allBed = allBed.sort_values(by=[15, 0], ascending=True)
+    allBed = allBed[(allBed[9] <= 100) & (allBed[9] >=0)]
+    allBed = allBed.sort_values(by=[9,0], ascending=True)
     df4 = pd.read_csv('GTEx_Analysis_v8_eQTL/' + fileHelp, sep='\t')
     finaldf = allBed.merge(df4, left_on=3, right_on='gene_id', how='left')
-    finaldf = finaldf[[4, 5, 6, 7, 8, 'gene_chr', 'gene_start', 'gene_end', 'gene_id', 15]]
-    finaldf[15] = finaldf[4]
+    finaldf = finaldf[[4, 5, 6, 7, 8, 'gene_chr', 'gene_start', 'gene_end', 'gene_id', 9]]
+    finaldf[9] = finaldf[4]
     finaldf.head()
     finaldf = finaldf.rename(
-        columns={5: "enahancer_chr", 6: "enhancer_start", 7: "enhancer_end", 8: "enhancer_id", 15: "p-val"})
+        columns={5: "enahancer_chr", 6: "enhancer_start", 7: "enhancer_end", 8: "enhancer_id", 9: "p-val"})
     finaldf.drop(columns=finaldf.columns[0],
                  axis=1,
                  inplace=True)

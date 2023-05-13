@@ -72,30 +72,44 @@ def startPoint(rawBed,file,tempFileName):
     df21 = df21[1:]
     df21.columns = new_header
     df21.to_csv('tempGene.bed', sep="\t", index=False)
+
     allEnv = checkIfgeneOrEnhancer(rawBed, 'tempGene.bed',final11,final12)
     df1_isEnhancer = allEnv[0]
     df1_isGene = allEnv[1]
     df2_isEnhancer = allEnv[2]
     df2_isGene = allEnv[3]
-    df_all = pd.merge(df1_isEnhancer, df2_isGene, how='inner', left_on=[14], right_on=[8])
-    df1_all = pd.merge(df2_isEnhancer, df1_isGene, how='inner', left_on=[14], right_on=[8])
+    df_all = pd.DataFrame()
+    df1_all = pd.DataFrame()
+    # if not (df1_isEnhancer.empty or df2_isGene.empty):
+    #     df_all = pd.merge(df1_isEnhancer, df2_isGene, how='inner', left_on=[7], right_on=[8])
+    # if not (df2_isEnhancer.empty or df1_isGene.empty):
+    #     df1_all = pd.merge(df2_isEnhancer, df1_isGene, how='inner', left_on=[7], right_on=[8])
+    df_all = pd.DataFrame()
+    df1_all = pd.DataFrame()
+    if (df1_isEnhancer.shape[0] != 0) and (df2_isGene.shape[0] != 0):
+        df_all = pd.merge(df1_isEnhancer, df2_isGene, how='inner', left_on=[7], right_on=[8])
+    if (df2_isEnhancer.shape[0] != 0) and (df1_isGene.shape[0] != 0):
+        df1_all = pd.merge(df2_isEnhancer, df1_isGene, how='inner', left_on=[7], right_on=[8])
     df_final = pd.concat([df_all, df1_all], axis=0)
-    k = df_final['9_y']
-    df_final.drop(columns=df_final.columns[4:len(df1_isEnhancer.columns)],
-                  axis=1,
-                  inplace=True)
-    df_final.drop(columns=df_final.columns[9:len(df2_isGene.columns) + len(df1_isEnhancer.columns)],
-                  axis=1,
-                  inplace=True)
-    df_final.drop(columns=df_final.columns[5],
-                  axis=1,
-                  inplace=True)
-    df_final[5] = k
-    df_final = df_final.drop_duplicates(subset=['3_x', '4_y'], keep='last')
-    new_header = df_final.iloc[0]
-    df_final = df_final[1:]
-    df_final.columns = new_header
+    if df_final.shape[0] != 0:
+        df_final = df_final.drop(7, axis=1)
+        k = df_final['9_y']
+        df_final.drop(columns=df_final.columns[4:len(df1_isEnhancer.columns)],
+                      axis=1,
+                      inplace=True)
+        df_final.drop(columns=df_final.columns[9:len(df2_isGene.columns) + len(df1_isEnhancer.columns)],
+                      axis=1,
+                      inplace=True)
+        df_final.drop(columns=df_final.columns[5],
+                      axis=1,
+                      inplace=True)
+        df_final[5] = k
+        df_final = df_final.drop_duplicates(subset=['3_x', '4_y'], keep='last')
+        new_header = df_final.iloc[0]
+        df_final = df_final[1:]
+        df_final.columns = new_header
     df_final.to_csv(tempFileName, sep='\t', header=None, index=False)
+
     os.remove(final11)
     os.remove(final12)
     logger.info('finished processing chiaPet with file '+tempFileName)

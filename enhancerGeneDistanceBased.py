@@ -74,8 +74,8 @@ def startPoint(rawBed,tempFinalFile):
     except BEDToolsError:
         raise Exception("Wrong file name")
     print(closestGene1.head())
-    closestGene1 = closestGene1[closestGene1[14].str.contains('ENSG')]
-    closestGene1 = closestGene1[closestGene1[3].str.contains('EH')]
+    closestGene1 = closestGene1[closestGene1[7].str.contains('ENSG')]
+    # closestGene1 = closestGene1[closestGene1[3].str.contains('EH')]
     closestGene1 = closestGene1.drop_duplicates().reset_index(drop=True)
     closestGene1.to_csv(tempFinalFile, sep='\t', header=None, index=False)
     cleanup()
