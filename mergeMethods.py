@@ -108,7 +108,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
 
     red = mpatches.Patch(color='red', label='Gene')
     plt1.legend(handles=[indigo, red])
-    plt1.savefig(imagesFileName+'enhancerGene.pdf",format="pdf", bbox_inches="tight")
+    plt1.savefig(imagesFileName+'enhancerGene.pdf',format="pdf", bbox_inches="tight")
     plt1.clf()
     # allDF = chiaPet.merge(eqTL, on=3).merge(distance, on=3)
     # allDF1 = allDF[(allDF['7_x'] == allDF['7_y']) & (allDF['7_x'] == allDF[7])]
