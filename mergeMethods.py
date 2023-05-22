@@ -193,20 +193,20 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
         fig22 = sns.histplot(data=newdf, x='repetitions')
         chiapetFig = fig22.get_figure()
         chiapetFig.suptitle('Histogram for chiapet of repetitions of Enhancer-Gene', fontsize=20)
-        chiapetFig.savefig(imagesFileName+"chiapetHisto.pdf',format="pdf", bbox_inches="tight")
+        chiapetFig.savefig(imagesFileName+"chiapetHisto.pdf",format="pdf", bbox_inches="tight")
     newdf_distance[newdf_distance.repetitions > 1].count()
     if newdf_distance.shape[0] > 0:
         fig223 = sns.histplot(data=newdf_distance, x='repetitions', bins=5)
         distanceFig = fig223.get_figure()
         distanceFig.suptitle('Histogram for Distance of repetitions of Enhancer-Gene', fontsize=20)
-        distanceFig.savefig(imagesFileName+"distanceHisto.pdf',format="pdf", bbox_inches="tight")
+        distanceFig.savefig(imagesFileName+"distanceHisto.pdf",format="pdf", bbox_inches="tight")
         fig223.figure.clf()
     if newdf_eqtl.shape[0] > 0:
         fig228 = sns.histplot(data=newdf_eqtl, x='repetitions')
         eqtlFig = fig228.get_figure()
         eqtlFig.suptitle('Histogram for eQTL of repetitions of Enhancer-Gene', fontsize=20)
 
-        eqtlFig.savefig(imagesFileName+"eqtlHisto.pdf',format="pdf", bbox_inches="tight")
+        eqtlFig.savefig(imagesFileName+"eqtlHisto.pdf",format="pdf", bbox_inches="tight")
         fig228.figure.clf()
 
 
