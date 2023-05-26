@@ -68,7 +68,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
         eqTL[10] = eqTL.apply(startPosition, axis=1)
     finalConcat = pd.concat([chiaPet, eqTL, distance])
     fig1 = sns.countplot(x=9, data=finalConcat)
-    fig1.suptitle('TotalcountComparison',fontsize=20)
+    fig1.suptitle('TotalcountC',fontsize=20)
     fig1.figure.savefig(imagesFileName+"TotalcountComparsion.pdf",format="pdf", bbox_inches="tight")
     fig1.figure.clf()
     finalConcat.groupby([9]).nunique()[3]
@@ -108,6 +108,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
 
     red = mpatches.Patch(color='red', label='Gene')
     plt1.legend(handles=[indigo, red])
+    plt1.title("Enhancer gene bars")
     plt1.savefig(imagesFileName+'enhancerGene.pdf',format="pdf", bbox_inches="tight")
     plt1.clf()
     # allDF = chiaPet.merge(eqTL, on=3).merge(distance, on=3)
