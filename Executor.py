@@ -231,7 +231,6 @@ def hello():
 
     except Exception as e:
         logger.error(str(e))
-        raise Exception('file name is not properly formatted')
         abort(make_response(jsonify(message=str(e)), 400))
 
 
