@@ -97,7 +97,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     red = mpatches.Patch(color='red', label='Gene')
 
     plt.legend(handles=[indigo, red])
-    plt.title("Enhancer gene bar")
+    plt.suptitle("Enhancer gene bar")
     # plt.show()
     plt.clf()
     ax1 = finalConcat.groupby([9]).nunique()[3].plot(kind='bar', color="indigo", title='Enhancers', logy=True,
@@ -108,7 +108,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
 
     red = mpatches.Patch(color='red', label='Gene')
     plt1.legend(handles=[indigo, red])
-    plt1.title("Enhancer gene bars")
+    plt1.suptitle("Enhancer gene bars")
     plt1.savefig(imagesFileName+'enhancerGene.pdf',format="pdf", bbox_inches="tight")
     plt1.clf()
     # allDF = chiaPet.merge(eqTL, on=3).merge(distance, on=3)
