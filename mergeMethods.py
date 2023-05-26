@@ -68,7 +68,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
         eqTL[10] = eqTL.apply(startPosition, axis=1)
     finalConcat = pd.concat([chiaPet, eqTL, distance])
     fig1 = sns.countplot(x=9, data=finalConcat)
-    fig1.suptitle('',fontsize=20)
+    fig1.suptitle('TotalcountComparison',fontsize=20)
     fig1.figure.savefig(imagesFileName+"TotalcountComparsion.pdf",format="pdf", bbox_inches="tight")
     fig1.figure.clf()
     finalConcat.groupby([9]).nunique()[3]
