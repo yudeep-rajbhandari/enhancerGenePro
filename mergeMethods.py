@@ -33,19 +33,19 @@ def createVenn(chiapet,distance,eqtl):
     ax = plt.gca()
     num=3
     setAll = [chiapet,distance,eqtl]
-    li = ['chiapet', 'distance', 'eqtl']
+    li = ['Peakachu', 'Distance', 'eQTL']
     if(len(chiapet)==0):
         num=num-1
         setAll.remove(chiapet)
-        li.remove('chiapet')
+        li.remove('Peakachu')
     if(len(distance)==0):
         num=num-1
         setAll.remove(distance)
-        li.remove('distance')
+        li.remove('Distance')
     if(len(eqtl)==0):
         num=num-1
         setAll.remove(eqtl)
-        li.remove('eqtl')
+        li.remove('eQTL')
     if(num==3):
         return venn3(setAll, tuple(li),ax=ax)
     elif (num==2):
@@ -57,36 +57,36 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     distance = checkAndSupplyFile(distanceVal)
     eqTL = checkAndSupplyFile(eqtlVal)
     distance[8] = distance[8].apply(lambda x: np.log10(x) if x != 0 else x)
-    chiaPet[9] = 'chiaPet'
+    chiaPet[9] = 'Peakachu'
     if (len(chiaPet[3]) > 0) and (len(chiaPet[7]) > 0):
         chiaPet[10] = chiaPet.apply(startPosition, axis=1)
     if (len(distance[3]) > 0) and (len(distance[7]) > 0):
         distance[10] = distance.apply(startPosition, axis=1)
-    distance[9] = 'distance'
-    eqTL[9] = 'eqtl'
+    distance[9] = 'Distance'
+    eqTL[9] = 'eQTL'
     if (len(eqTL[3]) > 0) and (len(eqTL[7]) > 0):
         eqTL[10] = eqTL.apply(startPosition, axis=1)
     finalConcat = pd.concat([chiaPet, eqTL, distance])
     fig1 = sns.countplot(x=9, data=finalConcat)
-    # fig1.suptitle('TotalcountC',fontsize=20)
+    fig1.set(title='Enhancer-Gene Links Counts Comparison',xlabel='',ylabel='Count')
     fig1.figure.savefig(imagesFileName+"TotalcountComparsion.pdf",format="pdf", bbox_inches="tight")
     fig1.figure.clf()
     finalConcat.groupby([9]).nunique()[3]
     fig27 = finalConcat.groupby([9]).nunique()[3].plot(kind='bar', color="indigo", title='Enhancers',
-                                                       ylabel='Unique Enhancer Count',
-                                                       xlabel='Method', figsize=(10, 10))
+                                                       ylabel='# Unique Enhancers',
+                                                       xlabel='', figsize=(10, 10))
     enhancersFig = fig27.get_figure()
     # enhancersFig.suptitle('Enhancer comparision', fontsize=20)
 
-    enhancersFig.savefig(imagesFileName+"enhancers.pdf",format="pdf", bbox_inches="tight")
+    enhancersFig.savefig(imagesFileName+"uniqueEnhancersByMethod.pdf",format="pdf", bbox_inches="tight")
     fig27.figure.clf()
 
     fig37 = finalConcat.groupby([9]).nunique()[7].plot(kind='bar', color="red", title='Genes',
-                                                       ylabel='Unique Genes Count',
-                                                       xlabel='Method', figsize=(10, 10))
+                                                       ylabel='# Unique Genes',
+                                                       xlabel='', figsize=(10, 10))
     fig37.figure.suptitle('Gene comparision', fontsize=20)
 
-    fig37.figure.savefig(imagesFileName+"GeneComparsion.pdf",format="pdf", bbox_inches="tight")
+    fig37.figure.savefig(imagesFileName+"uniqueGenesByMethod.pdf",format="pdf", bbox_inches="tight")
     fig37.figure.clf()
     ax1 = finalConcat.groupby([9]).nunique()[3].plot(kind='bar', color="indigo", title='Enhancers',
                                                      figsize=(6, 5))
@@ -102,12 +102,14 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     plt.clf()
     ax1 = finalConcat.groupby([9]).nunique()[3].plot(kind='bar', color="indigo", title='Enhancers', logy=True,
                                                      figsize=(6, 5))
-    ax2 = finalConcat.groupby([9]).nunique()[7].plot(kind='bar', color="red", title='Genes', logy=True,
+    ax2 = finalConcat.groupby([9]).nunique()[7].plot(kind='bar', color="red", title='Unique Enhancers Vs Genes', logy=True,
                                                      figsize=(6, 5))
     indigo = mpatches.Patch(color='indigo', label='Enhancer')
 
     red = mpatches.Patch(color='red', label='Gene')
     plt1.legend(handles=[indigo, red])
+    plt1.ylabel('# Unique Enhancers/Genes')
+    plt1.xlabel('')
     # plt1.suptitle("Enhancer gene bars")
     plt1.savefig(imagesFileName+'enhancerGene.pdf',format="pdf", bbox_inches="tight")
     plt1.clf()
@@ -121,7 +123,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     fig = plt.figure(figsize=(10, 10))
 
     createVenn(set1, set2, set3)
-    fig.suptitle('Venn diagram of unique Genes', fontsize=20)
+    fig.suptitle('Number of unique genes linked per method', fontsize=20)
     plt.savefig(imagesFileName+'AllGeneComparsion.pdf',format="pdf", bbox_inches="tight")
     plt.clf()
 
@@ -129,7 +131,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     set2 = set(distance[3])
     set3 = set(eqTL[3])
     fig = plt.figure(figsize=(10, 10))
-    fig.suptitle('Venn diagram of number of unique Enhancer', fontsize=20)
+    fig.suptitle('Number of unique enhancers linked per method', fontsize=20)
 
     createVenn(set1,set2,set3)
     plt.savefig(imagesFileName+'AllEnhancerComparsion.pdf',format="pdf", bbox_inches="tight")
@@ -140,13 +142,19 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     set2 = set(eqTL[10])
     sets = [set1, set2, set3]
     fig = plt.figure(figsize=(10, 10))
-    fig.suptitle('Venn diagram of number of unique Enhancer-Gene', fontsize=20)
+    fig.suptitle('Number of unique enhancers-Gene linkage per method', fontsize=20)
     ax = plt.gca()
     v = createVenn(set1,set2,set3)
     h, l = [], []
-    for i in ['10', '01', '100']:
+    if len(set1) != 0 and len(set2) !=0 and len(set3) !=0:
+        labels = ['100','010', '001']
+    else:
+        labels = ['100', '010']
+
+    for i in labels:
         # remove label by setting them to empty string:
-        v.get_label_by_id(i).set_text("")
+        # if v.get_label_by_id(i) is not None:
+        #     v.get_label_by_id(i).set_text(i)
         # append patch to handles list
         h.append(v.get_patch_by_id(i))
         # append count to labels list
@@ -157,7 +165,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     if not math.isnan(eqTL[8].mean()):
         l.append(0 if math.isnan(eqTL[8].mean()) else eqTL[8].mean())
     # create legend from handles and labels    
-    ax.legend(handles=h, labels=l, title="p-value")
+    ax.legend(handles=h, labels=l, title="p-value",loc='upper center', bbox_to_anchor=(0.5, -0.05))
 
     plt.savefig(imagesFileName+'enhancerGeneVenn.pdf',format="pdf", bbox_inches="tight")
     plt.clf()
@@ -168,7 +176,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     fig = plt.figure(figsize=(10, 10))
     fig.suptitle('Venn diagram of number of unique Enhancer', fontsize=20)
 
-    ax = venn2([set1, set3], ('chiapet', 'eqtl'))
+    ax = venn2([set1, set3], ('Peakachu', 'eQTL'))
     # plt.show()
     plt.savefig(imagesFileName+'enhancerchiaPetEQTL.pdf',format="pdf", bbox_inches="tight")
     plt.clf()
@@ -176,13 +184,13 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     df2 = dict(Counter(distance[3]))
     df3 = dict(Counter(eqTL[3]))
     newdf = pd.DataFrame.from_dict(df1, orient="index").reset_index()
-    newdf = newdf.rename(columns={0: 'repetitions'})
+    newdf = newdf.rename(columns={0: 'Shared enhancer-gene links'})
     newdf[1] = 'chiaPet'
     newdf_distance = pd.DataFrame.from_dict(df2, orient="index").reset_index()
-    newdf_distance = newdf_distance.rename(columns={0: 'repetitions'})
+    newdf_distance = newdf_distance.rename(columns={0: 'Shared enhancer-gene links'})
     newdf_distance[1] = 'distance'
     newdf_eqtl = pd.DataFrame.from_dict(df3, orient="index").reset_index()
-    newdf_eqtl = newdf_eqtl.rename(columns={0: 'repetitions'})
+    newdf_eqtl = newdf_eqtl.rename(columns={0: 'Shared enhancer-gene links'})
     newdf_eqtl[1] = 'eqtl'
     del (df1)
     del (df2)
@@ -191,22 +199,21 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     del (distance)
     del (eqTL)
     if newdf.shape[0] > 0:
-        fig22 = sns.histplot(data=newdf, x='repetitions')
+        fig22 = sns.histplot(data=newdf, x='Shared enhancer-gene links')
         chiapetFig = fig22.get_figure()
-        chiapetFig.suptitle('Histogram for chiapet of repetitions of Enhancer-Gene', fontsize=20)
-        chiapetFig.savefig(imagesFileName+"chiapetHisto.pdf",format="pdf", bbox_inches="tight")
-    newdf_distance[newdf_distance.repetitions > 1].count()
+        chiapetFig.suptitle('Histogram for Peakachu of repetitions of Enhancer-Gene', fontsize=20)
+        chiapetFig.savefig(imagesFileName+"PeakachuHisto.pdf",format="pdf", bbox_inches="tight")
+    # newdf_distance[newdf_distance.repetitions > 1].count()
     if newdf_distance.shape[0] > 0:
-        fig223 = sns.histplot(data=newdf_distance, x='repetitions', bins=5)
+        fig223 = sns.histplot(data=newdf_distance, x='Shared enhancer-gene links', bins=5)
         distanceFig = fig223.get_figure()
         distanceFig.suptitle('Histogram for Distance of repetitions of Enhancer-Gene', fontsize=20)
-        distanceFig.savefig(imagesFileName+"distanceHisto.pdf",format="pdf", bbox_inches="tight")
+        distanceFig.savefig(imagesFileName+"DistanceHisto.pdf",format="pdf", bbox_inches="tight")
         fig223.figure.clf()
     if newdf_eqtl.shape[0] > 0:
-        fig228 = sns.histplot(data=newdf_eqtl, x='repetitions')
+        fig228 = sns.histplot(data=newdf_eqtl, x='Shared enhancer-gene links')
         eqtlFig = fig228.get_figure()
         eqtlFig.suptitle('Histogram for eQTL of repetitions of Enhancer-Gene', fontsize=20)
-
         eqtlFig.savefig(imagesFileName+"eqtlHisto.pdf",format="pdf", bbox_inches="tight")
         fig228.figure.clf()
 

@@ -9,7 +9,6 @@ import uuid
 import pandas as pd
 
 from pybedtools import BedTool
-from pybedtools.featurefuncs import TSS
 import os
 
 

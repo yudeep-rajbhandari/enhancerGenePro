@@ -9,7 +9,23 @@
 			font-family: Arial, sans-serif;
 
 		}
-
+      .heading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: space-between;
+        background-color: #003073;
+        color: white;
+        padding: 5px 20px;
+        width: 100%;
+      }
+            h3 {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 0;
+        margin-top: 0;
+      }
 		form {
 			width: 400px;
 			margin: auto;
@@ -95,20 +111,22 @@
     }
 </script>
 <body>
-<h2 style="margin-top: 20px">Enhancer-Gene Prediction Comparison</h2>
+ <div class="heading">
+        <h3>Enhancer-Gene Prediction Comparison
+        </h3>
+         <a style="font-weight: bold; color: white" href="/">Usage</a>
 
+      </div>
 <div class="progress">
 	<div class="progressBar" id="aa" style="width: 100%"></div>
 </div>
+ <br>
 <div class="download">
-	<h4>Your file is ready to download.</h4>
+    <h4>Your file is ready to download.</h4>
+
 	<a class="btn btn-outline-success btn-lg btn-block" role="button" href="{{ url_for('database_download', filename=filename) }}">Download File</a>
-<div>
-    <br>Download the above file. <br>
-Unzip it. <br>
-Enjoy.
-</div>
-<a class="btn btn-outline-success btn-lg btn-block" role="button" href="index1.html">Start Another Analysis</a>
+
+<a class="btn btn-outline-success btn-lg btn-block" role="button" href="/">Start Another Analysis</a>
 </div>
 
 </body>

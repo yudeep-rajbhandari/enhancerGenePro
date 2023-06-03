@@ -4,16 +4,16 @@ import logging
 # In[4]:
 import os
 import uuid
-import pandas as pd
-from flask import Flask, flash, request, abort, make_response, jsonify, render_template, send_from_directory
-from werkzeug.utils import secure_filename
+
+from flask import Flask, flash, request, render_template, url_for,send_file
+from werkzeug.utils import secure_filename, redirect
+
 import chiaPetAnalysis
 # from Process import Process
 from Process import Process
 
 app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
-import sys
 import shutil
 from flask import Response
 import enhancerGeneDistanceBased
@@ -21,11 +21,11 @@ import eQTLAanalysis
 import mergeMethods
 import datetime
 import threading
-from pybedtools.helpers import BEDToolsError, cleanup
 import pandas as pd
 
 logger = logging.getLogger('waitress')
 logger.setLevel(logging.INFO)
+
 
 def my_scheduled_job():
     logging.info("Scheduler running")
@@ -83,9 +83,9 @@ def executeFunc(a,organ):
     myuuid = str(uuid.uuid4())
     imagesFileName = temp + 'images-' + myuuid
     os.mkdir(imagesFileName[0:len(imagesFileName)])
-    chiaFile = imagesFileName+'/tempChiapet'+myuuid+'.bed'
-    distanceFile = imagesFileName+'/tempFinaldistance'+myuuid+'.bed'
-    eqtlFile = imagesFileName+'/tempFinaleQTL' + myuuid + '.bed'
+    chiaFile = imagesFileName+'/peakachu_linked'+myuuid+'.bed'
+    distanceFile = imagesFileName+'/distance_linked'+myuuid+'.bed'
+    eqtlFile = imagesFileName+'/eqtl_linked' + myuuid + '.bed'
     df22 = pd.read_csv( a, sep='\t', header=None)
     tempEQTL1 = 'temp/rawBed' + str(uuid.uuid4()) + '.bed'
     if(len(df22.columns) < 4):
@@ -113,32 +113,7 @@ def executeFunc(a,organ):
             raise Exception("The file provided does not belong to the associated organ")
         else:
             raise Exception("Something went wrong with the file, please check your upload file")
-
-
-    # except BEDToolsError as e:
-    #     print("error:", e, file=sys.stderr)
-    #     os._exit(1)
-    #     raise Exception("Something is wrong")
-
-
-
-
-
-    # result_chiaPetAnalysis = pool.map_async(chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile))
-    # result_enhancerGeneDistanceBased = pool.map_async(enhancerGeneDistanceBased.startPoint(a,distanceFile))
-    # result_eQTLAanalysis = pool.map_async(eQTLAanalysis.startPoint(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile))
-    # print(result_eQTLAanalysis,result_chiaPetAnalysis,result_enhancerGeneDistanceBased)
-
-    # ray.get([chiaPetAnalysis.startPoint.remote(a,chiapet.values[0],chiaFile),
-    #          enhancerGeneDistanceBased.startPoint.remote(a,distanceFile),
-    #          eQTLAanalysis.startPoint.remote(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile)])
-
-    # chiaPetAnalysis.startPoint(a,chiapet.values[0],chiaFile)
-    # enhancerGeneDistanceBased.startPoint(a,distanceFile)
-    # eQTLAanalysis.startPoint(a,eqtl.values[0],eqtlHelp.values[0],eqtlFile)
-
     mergeMethods.startPoint(chiaFile,distanceFile,eqtlFile,imagesFileName+'/')
-
     shutil.make_archive(imagesFileName, 'zip', imagesFileName)
     imagesFileName = imagesFileName[len(temp)-1:len(imagesFileName)]
     os.remove(chiaFile)
@@ -170,37 +145,20 @@ def database_download(filename):
         'Content-Disposition': 'attachment; filename=%s;' % zipname
     })
 
+@app.route('/download/<filename>')
+def download(filename):
+    path='static'
+    return send_file(os.path.join(path, filename), as_attachment=True)
+
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = ['bed', 'gz']
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# @app.route('/database_download/<filename>')
-# def database_download(filename):
-#     return send_from_directory('database_reports', filename)
-# @app.route('/execute/<organ>',methods=['GET', 'POST'])
-# def show_user(organ):
-#     try:
-#         if request.method == 'POST':
-#             # check if the post request has the file part
-#             if 'file' not in request.files:
-#                 flash('No file part')
-#                 raise Exception('No file part')
-#             file = request.files['file']
-#             if file.filename == '':
-#                 flash('No selected file')
-#                 raise Exception('No Selected file')
-#             if file and allowed_file(file.filename):
-#                 filename = secure_filename(file.filename)
-#                 file.save(filename)
-#                 images = executeFunc(filename,organ)
-#                 return render_template('final.html', filename=images)
-#                 # return sendFile(images)
-#             else:
-#                 raise Exception('file name is not properly formatted')
-#
-#     except Exception as e:
-#         abort(make_response(jsonify(message=str(e)), 400))
+
+@app.route('/usage', methods=['GET'])
+def usage():
+    return render_template('usage.html')
 
 @app.route('/', methods=['GET','POST'])
 def hello():
@@ -209,12 +167,12 @@ def hello():
             return render_template('index1.html')
         elif request.method == 'POST':
             organ = request.form['organ']
-            if(organ == 'Select an organ'):
-                raise Exception('No Selected organ')
+            if(organ == 'Select a tissue'):
+                # return redirect("/",code=302)
+                raise Exception('tissue name not supported')
             print(organ)
             # check if the post request has the file part
             if 'file' not in request.files:
-                flash('No file part')
                 raise Exception('No file part')
             file = request.files['file']
             if file.filename == '':
@@ -227,27 +185,14 @@ def hello():
                 return render_template('final.html', filename=images)
                 # return sendFile(images)
             else:
-                raise Exception('file name is not properly formatted')
+                raise Exception('file  is not properly formatted')
 
     except Exception as e:
+
         logger.error(str(e))
-        abort(make_response(jsonify(message=str(e)), 400))
+        flash(str(e),'error')
+        return redirect(url_for('hello'))
 
+        # abort(make_response(jsonify(message=str(e)), 400))
 
-
-  #returns the username
-  # return 'Username: %s' % username
-
-
-
-# In[4]:
-
-
-
-
-
-# In[ ]:
-
-
-# os.system('python3 mergeMethods.py '+a)
 

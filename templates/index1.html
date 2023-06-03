@@ -31,11 +31,12 @@
         top: 0;
         left: 0;
         display: flex;
-        justify-content: flex-start;
+        justify-content: space-between;
         background-color: #003073;
         color: white;
         padding: 5px 20px;
         width: 100%;
+
       }
       /* .top-part::before {
         position: absolute;
@@ -169,7 +170,7 @@
       var selectedValue = ddl.options[ddl.selectedIndex].value;
       console.log(selectedValue);
       if (
-        selectedValue == "Select an organ" ||
+        selectedValue == "Select a tissue" ||
         document.getElementById("file").value == ""
       ) {
         alert("Please select an organ type with a suitable file");
@@ -183,10 +184,15 @@
   <body>
     <div class="top-part">
       <div class="heading">
-        <h3>Enhancer-Gene Prediction Comparison 
+        <h3>Enhancer-Gene Prediction Comparison
         </h3>
+         <a style="font-weight: bold; color: white" href="/usage">Usage</a>
+
       </div>
+    <br>
+
       <div>
+
         <div>
           <div class="progress">
             <div class="progressBar" id="aa" style="width: 10%"></div>
@@ -204,9 +210,9 @@
           </div>
           <form method="post" id="form" enctype="multipart/form-data">
             <div class="form-group">
-              <label for="name">Select an organ:</label>
+              <label for="name">Select a tissue:</label>
               <select name="organ" id="organ" class="form-select" required>
-                <option selected>Select an organ</option>
+                <option selected>Select a tissue</option>
                 <option value="liver">liver</option>
                 <option value="leftVentricle">leftVentricle</option>
                 <option value="lung">lung</option>
@@ -236,12 +242,50 @@
               />
             </div>
             Accepted file types : bed, bed.gz <br />
-            <input type="submit" value="Upload" onclick="loading()" />
+
+                   {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+   {{ message }}
+</div>
+
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+              <input type="submit" value="Upload" onclick="loading()" />
           </form>
         </div>
       </div>
     </div>
     <h3 class="header">Visualize the similarities and differences between enhancer-gene linking strategies</h3>
+        <div id="parent" class="parent">
+      <div id="left" class="left">
+        <h2 class="title">Get all these plots for 3 methods</h1>
+        <p>Distance based : Based on proximity of enhancer and gene</p>
+        <p>
+          Chromatin Loop based : Based on Peakachu dataset in genome-wide contact
+          maps
+        </p>
+        <p>eQtl : Genetic variant associated with gene expression level</p>
+      </div>
+      <div id="right" class="right">
+        <div style="display: flex; flex-direction: column">
+          <div style="display: flex; flex-direction: row">
+            <img style="width: 200px; height: auto" src="{{ url_for('static', filename='chia.jpg') }}" />
+            <img style="width: 200px; height: auto" src="{{ url_for('static', filename='eqtl.jpg') }}" />
+          </div>
+          <img
+            style="width: 400px; height: auto"
+            src="{{ url_for('static', filename='distanceBased1.png') }}"
+          />
+        </div>
+      </div>
+    </div>
+
     <div id="parent" class="parent">
       <div id="left" class="left">
         <h2 class="title">Bar plots: Know the numbers</h1>
@@ -256,7 +300,8 @@
           style="width: 300px; height: auto"
           src="{{ url_for('static', filename='enhancerGene.png') }}"
         />
-        <img style="width: 300px; height: auto" src="{{ url_for('static', filename='enhancers.png') }} "/>
+
+        <img style="width: 300px; height: auto" src="{{ url_for('static', filename='uniqueEnhancersByMethod.png') }} "/>
       </div>
     </div>
     <div id="parent" class="parent">
@@ -297,32 +342,27 @@
       <div id="right" class="right">
         <img
           style="width: 300px; height: auto"
-          src="{{ url_for('static', filename='chiapetHisto.png') }}"
+          src="{{ url_for('static', filename='PeakachuHisto.png') }}"
         />
         <img style="width: 300px; height: auto" src="{{ url_for('static', filename='eqtlHisto.png') }}" />
       </div>
     </div>
-    <div id="parent" class="parent">
+   <div id="parent" class="parent">
       <div id="left" class="left">
-        <h2 class="title">Get all these plots for 3 methods</h1>
-        <p>Distance based : Based on proximity of enhancer and gene</p>
+        <h2 class="title">Get your demos from here</h1>
         <p>
-          chiaPet : Based on chromatin loop detection in genome-wide contact
-          maps
+          Knowing how many times your enhancer has linked to different genes can
+          let you know about the nature of the enhancers in your data set. It
+          can help you to choose one among three methods based on the type of
+          result you are expecting from the data set based on frequency.
         </p>
-        <p>eQtl : Genetic variant associated with gene expression level</p>
       </div>
       <div id="right" class="right">
-        <div style="display: flex; flex-direction: column">
-          <div style="display: flex; flex-direction: row">
-            <img style="width: 200px; height: auto" src="{{ url_for('static', filename='chia.jpg') }}" />
-            <img style="width: 200px; height: auto" src="{{ url_for('static', filename='eqtl.jpg') }}" />
-          </div>
-          <img
-            style="width: 400px; height: auto"
-            src="{{ url_for('static', filename='distanceBased1.png') }}"
-          />
-        </div>
+        <img
+          style="width: 300px; height: auto"
+          src="{{ url_for('static', filename='PeakachuHisto.png') }}"
+        />
+        <img style="width: 300px; height: auto" src="{{ url_for('static', filename='eqtlHisto.png') }}" />
       </div>
     </div>
   </body>
