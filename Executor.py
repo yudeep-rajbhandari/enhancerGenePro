@@ -146,8 +146,8 @@ def database_download(filename):
     zipname = filename+'.zip'
     with open(os.path.join(path, zipname), 'rb') as f:
         data = f.readlines()
-    os.remove(os.path.join(path, zipname))
-    shutil.rmtree(os.path.join(path,filename))
+    # os.remove(os.path.join(path, zipname))
+    # shutil.rmtree(os.path.join(path,filename))
     return Response(data, headers={
         'Content-Type': 'application/zip',
         'Content-Disposition': 'attachment; filename=%s;' % zipname
