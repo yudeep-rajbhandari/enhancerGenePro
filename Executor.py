@@ -195,7 +195,7 @@ def hello():
                     msg = Message('Your enhancerGenie file Download', sender='enhancergenie@gmail.com', recipients=[email])
                     msg.html = render_template('emailFinal.html', filename=images)
                     mail.send(msg)
-                    print('email sent to '+ email)
+                    logger.info('email sent to '+ email)
                 return render_template('final.html', filename=images)
                 # return sendFile(images)
             else:
