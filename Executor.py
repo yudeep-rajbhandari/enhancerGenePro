@@ -22,6 +22,15 @@ import mergeMethods
 import datetime
 import threading
 import pandas as pd
+from flask_mail import Mail, Message
+
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'enhancergenie@gmail.com'
+app.config['MAIL_PASSWORD'] = 'cbcaufeqxfziaxrr'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 logger = logging.getLogger('waitress')
 logger.setLevel(logging.INFO)
@@ -134,7 +143,6 @@ def runInParallel(*fns):
 @app.route('/database_download/<filename>')
 def database_download(filename):
     path='temp'
-
     zipname = filename+'.zip'
     with open(os.path.join(path, zipname), 'rb') as f:
         data = f.readlines()
@@ -182,6 +190,10 @@ def hello():
                 filename = "temp/"+secure_filename(file.filename)
                 file.save(filename)
                 images = executeFunc(filename, organ)
+                msg = Message('Hello', sender='enhancergenie@gmail.com', recipients=['yudeep.rajbhandari@gmail.com'])
+                msg.html = render_template('final.html', filename=images)
+                # msg.body = '<a class="btn btn-outline-success btn-lg btn-block" role="button" href="{{ url_for('database_download', filename=images) }}">Download File</a>'
+                mail.send(msg)
                 return render_template('final.html', filename=images)
                 # return sendFile(images)
             else:

@@ -124,7 +124,7 @@
 <div class="download">
     <h4>Your file is ready to download.</h4>
 
-	<a class="btn btn-outline-success btn-lg btn-block" role="button" href="{{ url_for('database_download', filename=filename) }}">Download File</a>
+	<a class="btn btn-outline-success btn-lg btn-block" role="button" href="{{ request.base_url }}{{url_for('database_download', filename=filename) }}">Download File</a>
 
 <a class="btn btn-outline-success btn-lg btn-block" role="button" href="/">Start Another Analysis</a>
 </div>
