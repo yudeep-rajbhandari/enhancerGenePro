@@ -13,6 +13,8 @@ RUN pip install matplotlib-venn
 RUN pip3 install Flask
 RUN pip3 install waitress
 RUN pip3 install flask-crontab
+RUN pip3 install Flask-Mail
+
 WORKDIR /app
 
 COPY . .
