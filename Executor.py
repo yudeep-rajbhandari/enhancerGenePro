@@ -179,6 +179,7 @@ def hello():
                 # return redirect("/",code=302)
                 raise Exception('tissue name not supported')
             print(organ)
+            email = request.form['email']
             # check if the post request has the file part
             if 'file' not in request.files:
                 raise Exception('No file part')
@@ -190,10 +191,11 @@ def hello():
                 filename = "temp/"+secure_filename(file.filename)
                 file.save(filename)
                 images = executeFunc(filename, organ)
-                msg = Message('Hello', sender='enhancergenie@gmail.com', recipients=['yudeep.rajbhandari@gmail.com'])
-                msg.html = render_template('emailFinal.html', filename=images)
-                # msg.body = '<a class="btn btn-outline-success btn-lg btn-block" role="button" href="{{ url_for('database_download', filename=images) }}">Download File</a>'
-                mail.send(msg)
+                if email != '':
+                    msg = Message('Your enhancerGenie file Download', sender='enhancergenie@gmail.com', recipients=[email])
+                    msg.html = render_template('emailFinal.html', filename=images)
+                    mail.send(msg)
+                    print('email sent to '+ email)
                 return render_template('final.html', filename=images)
                 # return sendFile(images)
             else:
