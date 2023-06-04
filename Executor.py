@@ -191,7 +191,7 @@ def hello():
                 file.save(filename)
                 images = executeFunc(filename, organ)
                 msg = Message('Hello', sender='enhancergenie@gmail.com', recipients=['yudeep.rajbhandari@gmail.com'])
-                msg.html = render_template('final.html', filename=images)
+                msg.html = render_template('emailFinal.html', filename=images)
                 # msg.body = '<a class="btn btn-outline-success btn-lg btn-block" role="button" href="{{ url_for('database_download', filename=images) }}">Download File</a>'
                 mail.send(msg)
                 return render_template('final.html', filename=images)
