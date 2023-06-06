@@ -196,6 +196,7 @@ def hello():
                     msg.html = render_template('emailFinal.html', filename=images)
                     mail.send(msg)
                     logger.info('email sent to '+ email)
+                    flash('A link to download the results as sent in an email sent to '+ email)
                 return render_template('final.html', filename=images)
                 # return sendFile(images)
             else:
