@@ -131,6 +131,7 @@
         text-align: center;
         font-weight: bold;
       }
+
       .parent {
         display: flex;
         justify-content: space-around;
@@ -213,13 +214,14 @@
               <label for="name">Select a tissue:</label>
               <select name="organ" id="organ" class="form-select" required>
                 <option selected>Select a tissue</option>
+                  <option value="aorta">aorta</option>
+                   <option value="leftVentricle">heart leftVentricle</option>
                 <option value="liver">liver</option>
-                <option value="leftVentricle">leftVentricle</option>
+
                 <option value="lung">lung</option>
                 <option value="ovary">ovary</option>
                 <option value="pancreas">pancreas</option>
                 <option value="spleen">spleen</option>
-                <option value="aorta">aorta</option>
               </select>
             </div>
             <div class="form-group">
@@ -348,5 +350,53 @@
       </div>
     </div>
     </div>
+
+  <!-- Footer -->
+<footer class="text-center text-lg-start bg-white text-muted">
+  <!-- Section: Social media -->
+  <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+    <!-- Left -->
+    <div class="me-5 d-none d-lg-block">
+{#      <span>Get connected with us on social networks:</span>#}
+    </div>
+    <!-- Left -->
+
+    <!-- Right -->
+    <div>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-google"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <!-- Right -->
+  </section>
+  <!-- Section: Social media -->
+
+  <!-- Section: Links  -->
+
+
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+    © 2023 Copyright: Connect with us in
+    <a class="text-reset fw-bold" href="https://github.com/yudeep-rajbhandari/enhancerGenePro">Github</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
   </body>
+
 </html>

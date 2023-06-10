@@ -199,21 +199,63 @@
       <div id="left" class="left">
         <h2 class="title">Species Assembly</h1>
         <p>
-          We only support human species(Human: GRCh38) currently.  All our processing are based on GRCh38. using any other species might be processed,but results won't be accurate.
+          We only support human species(Human: GRCh38) currently.  All our processing are based on GRCh38, using any other species might be processed,but results won't be accurate.
             You can find more information about the assembly <a href="http://genome.ucsc.edu/cgi-bin/hgGateway?db=hg38">here</a>.
         </p>
       </div>
       <div id="right" class="right">
         <img
           style="width: 300px; height: auto"
-          src="{{ url_for('static', filename='img_2.png') }}"
+          src="{{ url_for('static', filename='img.png') }}"
         />
+        <img style="width: 300px; height: auto" src="{{ url_for('static', filename='img_1.png') }} "/>
       </div>
     </div>
-<div class="container">
-        <a href="/">Go back to home</a>
 
-</div>
+<footer class="text-center text-lg-start bg-white text-muted">
+  <!-- Section: Social media -->
+  <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+    <!-- Left -->
+    <div class="me-5 d-none d-lg-block">
+{#      <span>Get connected with us on social networks:</span>#}
+    </div>
+    <!-- Left -->
 
+    <!-- Right -->
+    <div>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-google"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="" class="me-4 link-secondary">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <!-- Right -->
+  </section>
+  <!-- Section: Social media -->
+
+  <!-- Section: Links  -->
+
+
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+    © 2023 Copyright: Connect with us in
+    <a class="text-reset fw-bold" href="https://github.com/yudeep-rajbhandari/enhancerGenePro">Github</a>
+      <a href="/">Go back to home</a>
+  </div>
+  <!-- Copyright -->
+</footer>
   </body>
 </html>
