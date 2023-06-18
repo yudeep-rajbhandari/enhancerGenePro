@@ -1,4 +1,6 @@
 # enhancerGenePro
+![alt text](https://github.com/yudeep-rajbhandari/enhancerGenePro/blob/master/architectureDiagram.pdf?raw=true)
+
 Since a docker container is used, no other programming language,libraries or software are required to be installed
 except the following:
 ##  Git
