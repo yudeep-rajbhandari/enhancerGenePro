@@ -82,7 +82,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
                                                        xlabel='', figsize=(10, 10))
     enhancersFig = fig27.get_figure()
     # enhancersFig.suptitle('Enhancer comparision', fontsize=20)
-
+    enhancersFig.figure.suptitle('Enhancer comparision', fontsize=20)
     enhancersFig.savefig(imagesFileNameBar+"uniqueEnhancersByMethod.pdf",format="pdf", bbox_inches="tight")
     fig27.figure.clf()
 
@@ -132,7 +132,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     fig = plt.figure(figsize=(10, 10))
 
     createVenn(set1, set2, set3)
-    fig.suptitle('Number of unique genes linked per method', fontsize=20)
+    fig.suptitle('Overlaps between unique genes linked per method', fontsize=20)
     plt.savefig(imagesFileNameVenn+'AllGeneComparsion.pdf',format="pdf", bbox_inches="tight")
     plt.clf()
 
@@ -168,27 +168,27 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
         h.append(v.get_patch_by_id(i))
         # append count to labels list
     if not math.isnan(chiaPet[8].mean()):
-        l.append(0 if math.isnan(chiaPet[8].mean()) else str(chiaPet[8].mean())+' unit1')
+        l.append(0 if math.isnan(chiaPet[8].mean()) else str(chiaPet[8].mean())+' pVal(Peakachu)')
     if not math.isnan(distance[8].mean()):
-        l.append(0 if math.isnan(distance[8].mean()) else str(distance[8].mean())+' unit2')
+        l.append(0 if math.isnan(distance[8].mean()) else str(distance[8].mean())+' log(distance)')
     if not math.isnan(eqTL[8].mean()):
-        l.append(0 if math.isnan(eqTL[8].mean()) else str(eqTL[8].mean())+' unit3')
+        l.append(0 if math.isnan(eqTL[8].mean()) else str(eqTL[8].mean())+' pVal(eQTL)')
     # create legend from handles and labels    
     ax.legend(handles=h, labels=l, title="Average measures of strength",loc='upper center', bbox_to_anchor=(0.5, -0.05))
 
     plt.savefig(imagesFileNameVenn+'enhancerGeneVenn.pdf',format="pdf", bbox_inches="tight")
     plt.clf()
 
-    set1 = set(chiaPet[10])
-    set2 = set(distance[10])
-    set3 = set(eqTL[10])
-    fig = plt.figure(figsize=(10, 10))
-    fig.suptitle('Venn diagram of number of unique Enhancer', fontsize=20)
-
-    ax = venn2([set1, set3], ('Peakachu', 'eQTL'))
-    # plt.show()
-    plt.savefig(imagesFileNameVenn+'enhancerchiaPetEQTL.pdf',format="pdf", bbox_inches="tight")
-    plt.clf()
+    # set1 = set(chiaPet[10])
+    # set2 = set(distance[10])
+    # set3 = set(eqTL[10])
+    # fig = plt.figure(figsize=(10, 10))
+    # fig.suptitle('Venn diagram of number of unique Enhancer', fontsize=20)
+    #
+    # ax = venn2([set1, set3], ('Peakachu', 'eQTL'))
+    # # plt.show()
+    # plt.savefig(imagesFileNameVenn+'enhancerchiaPetEQTL.pdf',format="pdf", bbox_inches="tight")
+    # plt.clf()
     df1 = dict(Counter(chiaPet[3]))
     df2 = dict(Counter(distance[3]))
     df3 = dict(Counter(eqTL[3]))
@@ -227,7 +227,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     if newdf_eqtl.shape[0] > 0:
         fig228 = sns.histplot(data=newdf_eqtl, x='Number of enhancers per gene')
         eqtlFig = fig228.get_figure()
-        eqtlFig.suptitle('Histogram for eQTL of repetitions of Enhancer-Gene', fontsize=20)
+        eqtlFig.suptitle('Distribution of enhancer number per gene (eQTL)', fontsize=20)
         eqtlFig.savefig(imagesFileNameHisto+"eqtlHisto.pdf",format="pdf", bbox_inches="tight")
         fig228.figure.clf()
 
