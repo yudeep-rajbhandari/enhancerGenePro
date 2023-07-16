@@ -113,7 +113,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
 
     red = mpatches.Patch(color='red', label='Gene')
     plt1.legend(handles=[indigo, red])
-    plt1.ylabel('# Unique Enhancers/Genes')
+    plt1.ylabel('')
     plt1.xlabel('')
     # plt1.suptitle("Enhancer gene bars")
     plt1.savefig(imagesFileNameBar+'enhancerGene.pdf',format="pdf", bbox_inches="tight")
@@ -147,8 +147,8 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     plt.clf()
 
     set1 = set(chiaPet[10])
-    set3 = set(distance[10])
-    set2 = set(eqTL[10])
+    set3 =  set(eqTL[10])
+    set2 = set(distance[10])
     sets = [set1, set2, set3]
     fig = plt.figure(figsize=(10, 10))
     fig.suptitle('Overlaps between unique enhancers-Gene linkage per method', fontsize=20)
@@ -168,13 +168,14 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
         h.append(v.get_patch_by_id(i))
         # append count to labels list
     if not math.isnan(chiaPet[8].mean()):
-        l.append(0 if math.isnan(chiaPet[8].mean()) else str(chiaPet[8].mean())+' pVal(Peakachu)')
+        l.append(0 if math.isnan(chiaPet[8].mean()) else str("{:.3f}".format(chiaPet[8].mean()))+' cScore')
     if not math.isnan(distance[8].mean()):
-        l.append(0 if math.isnan(distance[8].mean()) else str(distance[8].mean())+' log(distance)')
+        l.append(0 if math.isnan(distance[8].mean()) else str("{:.3f}".format(distance[8].mean()))+' log(distance)')
     if not math.isnan(eqTL[8].mean()):
-        l.append(0 if math.isnan(eqTL[8].mean()) else str(eqTL[8].mean())+' pVal(eQTL)')
+        l.append(0 if math.isnan(eqTL[8].mean()) else str('{:0.3e}'.format(eqTL[8].mean()))+' pVal(eQTL)')
     # create legend from handles and labels    
     ax.legend(handles=h, labels=l, title="Average measures of strength",loc='upper center', bbox_to_anchor=(0.5, -0.05))
+    plt.rcParams.update({'font.size': 22})
 
     plt.savefig(imagesFileNameVenn+'enhancerGeneVenn.pdf',format="pdf", bbox_inches="tight")
     plt.clf()
