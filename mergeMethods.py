@@ -54,6 +54,8 @@ def createVenn(chiapet,distance,eqtl):
 # In[39]:
 def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     logger.info("started visulaization")
+    # plt.switch_backend('agg')
+
     chiaPet = checkAndSupplyFile(chiapetVal)
     distance = checkAndSupplyFile(distanceVal)
     eqTL = checkAndSupplyFile(eqtlVal)
@@ -145,6 +147,7 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     createVenn(set1,set2,set3)
     plt.savefig(imagesFileNameVenn+'AllEnhancerComparsion.pdf',format="pdf", bbox_inches="tight")
     plt.clf()
+    plt.rcParams.update({'font.size': 15})
 
     set1 = set(chiaPet[10])
     set3 =  set(eqTL[10])
@@ -174,8 +177,8 @@ def startPoint(chiapetVal,distanceVal,eqtlVal,imagesFileName):
     if not math.isnan(eqTL[8].mean()):
         l.append(0 if math.isnan(eqTL[8].mean()) else str('{:0.3e}'.format(eqTL[8].mean()))+' pVal(eQTL)')
     # create legend from handles and labels    
-    ax.legend(handles=h, labels=l, title="Average measures of strength",loc='upper center', bbox_to_anchor=(0.5, -0.05))
-    plt.rcParams.update({'font.size': 22})
+    ax.legend(handles=h, labels=l, title="Average measures of strength",loc='upper center', bbox_to_anchor=(0.5, -0.05),fontsize = 25)
+
 
     plt.savefig(imagesFileNameVenn+'enhancerGeneVenn.pdf',format="pdf", bbox_inches="tight")
     plt.clf()
