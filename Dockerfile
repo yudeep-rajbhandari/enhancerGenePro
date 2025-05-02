@@ -1,22 +1,34 @@
-FROM ubuntu
+FROM python:3.11-slim
 
-RUN apt update
-RUN apt install python3-pip -y
-RUN apt-get install bedtools
-# RUN apt-get install libbz2-dev liblzma-dev
-RUN pip3 install pandas
-RUN pip3 install pybedtools
-RUN pip3 install seaborn
-RUN pip3 install matplotlib
-RUN pip3 install swifter
-RUN pip install matplotlib-venn
-RUN pip3 install Flask
-RUN pip3 install waitress
-RUN pip3 install flask-crontab
-RUN pip3 install Flask-Mail
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    bedtools \
+    libbz2-dev \
+    liblzma-dev \
+    zlib1g-dev \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
+# Set up working directory
 WORKDIR /app
 
+# Install Python packages directly
+RUN pip install --no-cache-dir \
+    pandas \
+    pybedtools \
+    seaborn \
+    matplotlib \
+    swifter \
+    matplotlib-venn \
+    Flask \
+    waitress \
+    flask-crontab \
+    Flask-Mail
+
+# Copy your app code
+ENV FLASK_APP=waitress_server.py
+
 COPY . .
-CMD ["flask", "crontab add"]
-CMD ["python3","waitress_server.py"]
+
+CMD ["sh", "-c", "flask crontab add && python3 waitress_server.py"]
+
